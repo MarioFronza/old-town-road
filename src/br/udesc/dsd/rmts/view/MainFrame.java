@@ -19,9 +19,9 @@ public class MainFrame extends JFrame {
         super.setFocusTraversalKeysEnabled(false);
         super.setTitle("Road Mesh Traffic Simulator");
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        super.setResizable(false);
-        super.setLayout(new GridLayout(1, 1));
-        super.setPreferredSize(new Dimension(30 * meshController.getX(), 30 * meshController.getY()));
+        super.setResizable(true);
+        super.setLayout(new BorderLayout());
+        super.setPreferredSize(new Dimension( 800, 600));
         super.pack();
         super.setLocationRelativeTo(null);
 

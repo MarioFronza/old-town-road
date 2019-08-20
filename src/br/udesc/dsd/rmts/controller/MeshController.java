@@ -18,7 +18,7 @@ public class MeshController {
 
     public void readAndCreateMatrix() {
         try {
-            Scanner input = new Scanner(new File("mesh/malha.txt"));
+            Scanner input = new Scanner(new File("mesh/mesh1.txt"));
             while (input.hasNextInt()) {
                 x = input.nextInt();
                 y = input.nextInt();
