@@ -21,13 +21,11 @@ public class MainFrame extends JFrame {
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
         super.setResizable(true);
         super.setLayout(new BorderLayout());
-        super.setPreferredSize(new Dimension( 800, 600));
-        super.pack();
-        super.setLocationRelativeTo(null);
 
         initComponents();
-        addComponents();
 
+        System.out.println(roadMeshPanel.getWidth());
+        addComponents();
     }
 
     private void initComponents() {
@@ -36,6 +34,9 @@ public class MainFrame extends JFrame {
 
     private void addComponents() {
         super.add(roadMeshPanel);
+        super.setPreferredSize(new Dimension( roadMeshPanel.getWidth(), roadMeshPanel.getHeigth() + 22));
+        super.pack();
+        super.setLocationRelativeTo(null);
     }
 
 }

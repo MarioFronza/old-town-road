@@ -51,6 +51,15 @@ public class RoadMeshPanel extends JPanel {
         roadMesh.setDefaultRenderer(Object.class, new RoadMeshItemRender());
     }
 
+    public int getHeigth(){
+        return (int) roadMesh.getMaximumSize().getHeight();
+    }
+
+
+    public int getWidth(){
+        return (int) roadMesh.getMaximumSize().getWidth();
+    }
+
     private void addComponents(){
         this.add(roadMesh);
     }
