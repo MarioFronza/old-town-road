@@ -1,15 +1,19 @@
 package br.udesc.dsd.rmts.controller;
 
+import br.udesc.dsd.rmts.controller.observer.Observer;
 import br.udesc.dsd.rmts.model.RoadItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MeshController implements IMeshController {
 
 	
 	private static MeshController instance;
+	private List<Observer> observers;
     private RoadItem matrix[][];
     private int x;
     private int y;
@@ -20,6 +24,10 @@ public class MeshController implements IMeshController {
         }
 
         return instance;
+    }
+    
+    private MeshController() {
+        this.observers = new ArrayList<>();
     }
 
     @Override
@@ -74,6 +82,16 @@ public class MeshController implements IMeshController {
     @Override
     public int getY() {
         return y;
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        this.observers.remove(observer);
     }
 
 }

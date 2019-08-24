@@ -1,6 +1,8 @@
 package br.udesc.dsd.rmts.controller;
 
-public interface IMeshController {
+import br.udesc.dsd.rmts.controller.observer.Observed;
+
+public interface IMeshController extends Observed {
 	
 	void readAndCreateMatrix(); 
 	
