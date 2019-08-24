@@ -1,13 +1,16 @@
 package br.udesc.dsd.rmts;
 
-import br.udesc.dsd.rmts.controller.MeshController;
-import br.udesc.dsd.rmts.view.MainFrame;
+import javax.swing.SwingUtilities;
+
+import br.udesc.dsd.rmts.view.ChoiceFrame;
 
 public class RoadMesh {
     public static void main(String[] args) {
-        MeshController meshController = new MeshController();
-
-        MainFrame mainFrame = new MainFrame(meshController);
-        mainFrame.setVisible(true);
+    	 SwingUtilities.invokeLater(new Runnable() {
+             @Override
+             public void run() {
+                 new ChoiceFrame().start();
+             }
+         });
     }
 }

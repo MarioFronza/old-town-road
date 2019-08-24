@@ -32,6 +32,7 @@ public class MeshController implements IMeshController {
 
     @Override
     public void readAndCreateMatrix() {
+    	this.notifyMessage("Creating the road mesh");
         try {
             @SuppressWarnings("resource")
 			Scanner input = new Scanner(new File("mesh/mesh3.txt"));
@@ -92,6 +93,13 @@ public class MeshController implements IMeshController {
     @Override
     public void removeObserver(Observer observer) {
         this.observers.remove(observer);
+    }
+    
+    @Override
+    public void notifyMessage(String message) {
+        for (Observer observer : observers) {
+            observer.message(message);
+        }
     }
 
 }
