@@ -6,19 +6,27 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class MeshController {
+public class MeshController implements IMeshController {
 
+	
+	private static MeshController instance;
     private RoadItem matrix[][];
     private int x;
     private int y;
+    
+    public static MeshController getInstance() {
+        if (instance == null) {
+            instance = new MeshController();
+        }
 
-    public MeshController() {
-        readAndCreateMatrix();
+        return instance;
     }
 
+    @Override
     public void readAndCreateMatrix() {
         try {
-            Scanner input = new Scanner(new File("mesh/mesh3.txt"));
+            @SuppressWarnings("resource")
+			Scanner input = new Scanner(new File("mesh/mesh3.txt"));
             while (input.hasNextInt()) {
                 x = input.nextInt();
                 y = input.nextInt();
@@ -53,14 +61,17 @@ public class MeshController {
         }
     }
 
+    @Override
     public String getMatrixPosition(int rowIndex, int columnIndex) {
         return matrix[rowIndex][columnIndex].getImagePath();
     }
-
+    
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
