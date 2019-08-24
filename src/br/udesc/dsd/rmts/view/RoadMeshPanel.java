@@ -8,8 +8,12 @@ import java.awt.*;
 
 public class RoadMeshPanel extends JPanel {
 
-    class RoadTableModel extends AbstractTableModel{
-        @Override
+	private static final long serialVersionUID = 1L;
+
+	class RoadTableModel extends AbstractTableModel{
+		private static final long serialVersionUID = 1L;
+
+		@Override
         public int getRowCount() {
             return meshController.getX();
         }

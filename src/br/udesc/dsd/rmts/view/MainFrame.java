@@ -8,7 +8,9 @@ import java.awt.*;
 
 public class MainFrame extends JFrame {
 
-    private RoadMeshPanel roadMeshPanel;
+	private static final long serialVersionUID = 1L;
+
+	private RoadMeshPanel roadMeshPanel;
 
     private MeshController meshController;
 
