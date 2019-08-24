@@ -1,24 +1,41 @@
 package br.udesc.dsd.rmts.controller;
 
+import br.udesc.dsd.rmts.controller.observer.Observer;
 import br.udesc.dsd.rmts.model.RoadItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class MeshController {
+public class MeshController implements IMeshController {
 
+	
+	private static MeshController instance;
+	private List<Observer> observers;
     private RoadItem matrix[][];
     private int x;
     private int y;
+    
+    public static MeshController getInstance() {
+        if (instance == null) {
+            instance = new MeshController();
+        }
 
-    public MeshController() {
-        readAndCreateMatrix();
+        return instance;
+    }
+    
+    private MeshController() {
+        this.observers = new ArrayList<>();
     }
 
+    @Override
     public void readAndCreateMatrix() {
+    	this.notifyMessage("Creating the road mesh");
         try {
-            Scanner input = new Scanner(new File("mesh/mesh3.txt"));
+            @SuppressWarnings("resource")
+			Scanner input = new Scanner(new File("mesh/mesh3.txt"));
             while (input.hasNextInt()) {
                 x = input.nextInt();
                 y = input.nextInt();
@@ -53,16 +70,36 @@ public class MeshController {
         }
     }
 
+    @Override
     public String getMatrixPosition(int rowIndex, int columnIndex) {
         return matrix[rowIndex][columnIndex].getImagePath();
     }
-
+    
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        this.observers.remove(observer);
+    }
+    
+    @Override
+    public void notifyMessage(String message) {
+        for (Observer observer : observers) {
+            observer.message(message);
+        }
     }
 
 }

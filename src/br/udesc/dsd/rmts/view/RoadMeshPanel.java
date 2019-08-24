@@ -1,5 +1,6 @@
 package br.udesc.dsd.rmts.view;
 
+import br.udesc.dsd.rmts.controller.IMeshController;
 import br.udesc.dsd.rmts.controller.MeshController;
 
 import javax.swing.*;
@@ -8,8 +9,12 @@ import java.awt.*;
 
 public class RoadMeshPanel extends JPanel {
 
-    class RoadTableModel extends AbstractTableModel{
-        @Override
+	private static final long serialVersionUID = 1L;
+
+	class RoadTableModel extends AbstractTableModel{
+		private static final long serialVersionUID = 1L;
+
+		@Override
         public int getRowCount() {
             return meshController.getX();
         }
@@ -25,11 +30,13 @@ public class RoadMeshPanel extends JPanel {
         }
     }
 
-    private MeshController meshController;
+    private IMeshController meshController;
     private JTable roadMesh;
 
-    public RoadMeshPanel(MeshController meshController) {
-        this.meshController = meshController;
+    public RoadMeshPanel() {
+        this.meshController = MeshController.getInstance();
+        this.meshController.readAndCreateMatrix();
+        
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setOpaque(false);
         this.initComponents();
