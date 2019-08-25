@@ -13,18 +13,18 @@ public class MainFrame extends JFrame implements Observer {
 
 	private static final long serialVersionUID = 1L;
 	
-	private IMeshController haruController;
+	private IMeshController meshController;
 	private RoadMeshPanel roadMeshPanel;
 
     public MainFrame() {
-    	this.haruController = MeshController.getInstance();
-    	this.haruController.addObserver(this);
+    	this.meshController = MeshController.getInstance();
+    	this.meshController.addObserver(this);
     	
         super.setFocusable(true);
         super.setFocusTraversalKeysEnabled(false);
         super.setTitle("🐎 Old town road");
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        super.setResizable(true);
+        super.setResizable(false);
         super.setLayout(new BorderLayout());
         super.addWindowListener(new WindowAdapter() {
             @Override
@@ -50,11 +50,17 @@ public class MainFrame extends JFrame implements Observer {
         super.setPreferredSize(new Dimension(roadMeshPanel.getWidth(), roadMeshPanel.getHeigth() + 22));
         super.pack();
         super.setLocationRelativeTo(null);
+        this.meshController.runSimulation();
     }
 
 	@Override
 	public void message(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
+
+    @Override
+    public void roadMeshUpdate() {
+//        this.roadMeshPanel.updateUI();
+    }
 
 }
