@@ -3,7 +3,6 @@ package br.udesc.dsd.rmts.controller;
 import br.udesc.dsd.rmts.controller.observer.Observer;
 import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
-import com.sun.jmx.remote.internal.ArrayQueue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
