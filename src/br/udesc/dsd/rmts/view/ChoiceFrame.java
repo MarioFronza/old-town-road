@@ -69,7 +69,7 @@ public class ChoiceFrame extends JFrame {
 		this.numberOfCars.setMaximumSize(new Dimension(350, 20));
 		this.numberOfCars.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		this.labelTimeInterval = new JLabel("Vehicle insertion range (in seconds):");
+		this.labelTimeInterval = new JLabel("Vehicle insertion range (in milliseconds):");
 		this.labelTimeInterval.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		this.timeInterval = new JTextField();

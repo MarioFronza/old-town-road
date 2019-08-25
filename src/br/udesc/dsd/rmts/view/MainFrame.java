@@ -3,6 +3,7 @@ package br.udesc.dsd.rmts.view;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -17,7 +18,7 @@ public class MainFrame extends JFrame implements Observer {
     private IMeshController meshController;
     private RoadMeshPanel roadMeshPanel;
     private JButton buttonStartSimulation;
-    private JButton buttonQuitSimulation;
+    private JButton buttonStopSimulation;
     private JPanel main;
 
     public MainFrame() {
@@ -49,32 +50,30 @@ public class MainFrame extends JFrame implements Observer {
         this.main.setLayout(new BoxLayout(this.main, BoxLayout.Y_AXIS));
         this.main.setBorder(new EmptyBorder(new Insets(10, 0, 10, 0)));
 
-
         this.buttonStartSimulation = new JButton();
         this.buttonStartSimulation.setText("Start simulation");
         this.buttonStartSimulation.setAlignmentX(Component.CENTER_ALIGNMENT);
+		this.buttonStartSimulation.addActionListener((ActionEvent e) -> {
+			this.meshController.runSimulation();
+		});
 
-        this.buttonQuitSimulation = new JButton();
-        this.buttonQuitSimulation.setText("Quit simulation");
-        this.buttonQuitSimulation.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-
+        this.buttonStopSimulation = new JButton();
+        this.buttonStopSimulation.setText("Stop simulation");
+        this.buttonStopSimulation.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
     private void addComponents() {
         this.main.add(buttonStartSimulation);
-        this.main.add(buttonQuitSimulation);
+        this.main.add(buttonStopSimulation);
         this.main.add(this.roadMeshPanel);
         this.main.setBackground(new Color(121, 121, 121));
         super.add(this.main);
-
     }
 
     private void start() {
         super.setPreferredSize(new Dimension(roadMeshPanel.getWidth(), roadMeshPanel.getHeigth() + 91));
         super.pack();
         super.setLocationRelativeTo(null);
-//        this.meshController.runSimulation();
     }
 
     @Override
