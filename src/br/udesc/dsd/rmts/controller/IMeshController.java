@@ -5,21 +5,33 @@ import br.udesc.dsd.rmts.controller.observer.Observed;
 import java.io.File;
 
 public interface IMeshController extends Observed {
-	
-	void readAndCreateMatrix(); 
-	
-	String getMatrixPosition(int rowIndex, int columnIndex);
 
-	File getFile();
+    void readAndCreateMatrix();
 
-	int getLines();
-	
-	int getColumns();
+    void runSimulation();
 
-	int getNumberOfCars();
+    void loadCarsInQueue();
 
-	void setPathName(File file);
+    void checkEntryPointOnTop(int x, int y, int direction);
 
-	void setNumberOfCars(int numberOfCars);
-	
+    void checkEntryPointOnLeft(int x, int y, int direction);
+
+    void checkEntryPointOnRight(int x, int y, int direction);
+
+    void checkEntryPointOnBottom(int x, int y, int direction);
+
+    String getMatrixPosition(int rowIndex, int columnIndex);
+
+    File getFile();
+
+    int getLines();
+
+    int getColumns();
+
+    void setPathName(File file);
+
+    void setNumberOfCars(int numberOfCars);
+
+    void setTimeInterval(int timeInterval);
+
 }

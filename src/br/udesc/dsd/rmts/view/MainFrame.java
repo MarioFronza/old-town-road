@@ -50,11 +50,17 @@ public class MainFrame extends JFrame implements Observer {
         super.setPreferredSize(new Dimension(roadMeshPanel.getWidth(), roadMeshPanel.getHeigth() + 22));
         super.pack();
         super.setLocationRelativeTo(null);
+        this.meshController.runSimulation();
     }
 
 	@Override
 	public void message(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
+
+    @Override
+    public void roadMeshUpdate() {
+//        this.roadMeshPanel.updateUI();
+    }
 
 }

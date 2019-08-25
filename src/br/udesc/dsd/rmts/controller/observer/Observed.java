@@ -7,4 +7,6 @@ public interface Observed {
     void removeObserver(Observer observer);
     
     void notifyMessage(String message);
+
+    void notifyRoadMeshUpdate();
 }

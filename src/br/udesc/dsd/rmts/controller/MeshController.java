@@ -1,24 +1,26 @@
 package br.udesc.dsd.rmts.controller;
 
 import br.udesc.dsd.rmts.controller.observer.Observer;
+import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
+import com.sun.jmx.remote.internal.ArrayQueue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class MeshController implements IMeshController {
 
 
     private static MeshController instance;
     private List<Observer> observers;
+    private Queue<Car> cars;
     private RoadItem matrix[][];
     private File file = null;
     private int lines;
     private int columns;
     private int numberOfCars;
+    private int timeInterval;
 
     public static MeshController getInstance() {
         if (instance == null) {
@@ -30,6 +32,7 @@ public class MeshController implements IMeshController {
 
     private MeshController() {
         this.observers = new ArrayList<>();
+        this.cars = new LinkedList<>();
     }
 
     @Override
@@ -50,16 +53,16 @@ public class MeshController implements IMeshController {
                                 matrix[i][j].setImagePath("assets/default.png");
                                 break;
                             case 1:
-                                checkEntryPointOnBottom(i, j);
+                                checkEntryPointOnBottom(i, j, 1);
                                 break;
                             case 2:
-                                checkEntryPointOnLeft(i, j);
+                                checkEntryPointOnLeft(i, j, 2);
                                 break;
                             case 3:
-                                checkEntryPointOnTop(i, j);
+                                checkEntryPointOnTop(i, j, 3);
                                 break;
                             case 4:
-                                checkEntryPointOnRight(i, j);
+                                checkEntryPointOnRight(i, j, 4);
                                 break;
                             default:
                                 matrix[i][j].setImagePath("assets/stone.png");
@@ -72,39 +75,71 @@ public class MeshController implements IMeshController {
         }
     }
 
-    public void runSimulation(){
+    @Override
+    public void runSimulation() { //Colocar metodo em thread separada
+
+        loadCarsInQueue();
+
+        while (!cars.isEmpty())
+            for (int i = 0; i < lines; i++) {
+                for (int j = 0; j < columns; j++) {
+                    if (matrix[i][j].isEntryPoint() && !cars.isEmpty()) {
+                        //definir intervalo aqui
+                        matrix[i][j].setCar(cars.remove());
+                        matrix[i][j].getCar().start();
+                        notifyRoadMeshUpdate();
+                        System.out.println("show");
+
+                    }
+                }
+            }
 
     }
 
-    public void checkEntryPointOnTop(int x, int y) {
+    @Override
+    public void loadCarsInQueue() {
+        for (int i = 0; i < numberOfCars; i++) {
+            cars.add(new Car("assets/car.png"));
+        }
+    }
+
+    @Override
+    public void checkEntryPointOnTop(int x, int y, int direction) {
         if (x - 1 < 0)
             matrix[x][y].setEntryPoint(true);
         else if (x + 1 >= this.lines)
             matrix[x][y].setExitPoint(true);
+        matrix[x][y].setDirection(direction);
         matrix[x][y].setImagePath("assets/down.png");
     }
 
-    public void checkEntryPointOnLeft(int x, int y) {
+    @Override
+    public void checkEntryPointOnLeft(int x, int y, int direction) {
         if (y - 1 < 0)
             matrix[x][y].setEntryPoint(true);
         else if (y + 1 >= this.columns)
             matrix[x][y].setExitPoint(true);
+        matrix[x][y].setDirection(direction);
         matrix[x][y].setImagePath("assets/right.png");
     }
 
-    public void checkEntryPointOnRight(int x, int y) {
+    @Override
+    public void checkEntryPointOnRight(int x, int y, int direction) {
         if (y + 1 >= this.columns)
             matrix[x][y].setEntryPoint(true);
         else if (y - 1 < 0)
             matrix[x][y].setExitPoint(true);
+        matrix[x][y].setDirection(direction);
         matrix[x][y].setImagePath("assets/left.png");
     }
 
-    public void checkEntryPointOnBottom(int x, int y) {
+    @Override
+    public void checkEntryPointOnBottom(int x, int y, int direction) {
         if (x + 1 >= this.lines)
             matrix[x][y].setEntryPoint(true);
         else if (x - 1 < 0)
             matrix[x][y].setExitPoint(true);
+        matrix[x][y].setDirection(direction);
         matrix[x][y].setImagePath("assets/up.png");
     }
 
@@ -129,13 +164,13 @@ public class MeshController implements IMeshController {
     }
 
     @Override
-    public int getNumberOfCars() {
-        return numberOfCars;
+    public void setPathName(File file) {
+        this.file = file;
     }
 
     @Override
-    public void setPathName(File file) {
-        this.file = file;
+    public void setTimeInterval(int timeInterval) {
+        this.timeInterval = timeInterval;
     }
 
     @Override
@@ -157,6 +192,13 @@ public class MeshController implements IMeshController {
     public void notifyMessage(String message) {
         for (Observer observer : observers) {
             observer.message(message);
+        }
+    }
+
+    @Override
+    public void notifyRoadMeshUpdate() {
+        for (Observer observer : observers) {
+            observer.roadMeshUpdate();
         }
     }
 

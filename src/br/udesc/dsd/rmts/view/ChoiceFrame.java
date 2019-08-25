@@ -96,7 +96,8 @@ public class ChoiceFrame extends JFrame {
 		this.buttonStart.addActionListener((ActionEvent e) -> {
 			if (validateFields()) {
 				super.setVisible(false);
-				meshController.setNumberOfCars(Integer.parseInt(numberOfCars.getText()));
+				this.meshController.setNumberOfCars(Integer.parseInt(numberOfCars.getText()));
+				this.meshController.setTimeInterval(Integer.parseInt(timeInterval.getText()));
 				MainFrame mainFrame = new MainFrame();
 				mainFrame.setVisible(true);
 			}
