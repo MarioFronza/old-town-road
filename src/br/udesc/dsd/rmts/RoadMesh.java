@@ -9,7 +9,7 @@ public class RoadMesh {
     	 SwingUtilities.invokeLater(new Runnable() {
              @Override
              public void run() {
-                 new ChoiceFrame().start();
+                 new ChoiceFrame();
              }
          });
     }

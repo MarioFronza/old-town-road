@@ -11,13 +11,14 @@ import java.util.Scanner;
 
 public class MeshController implements IMeshController {
 
-	
-	private static MeshController instance;
-	private List<Observer> observers;
+
+    private static MeshController instance;
+    private List<Observer> observers;
     private RoadItem matrix[][];
-    private int x;
-    private int y;
-    
+    private File file = null;
+    private int lines;
+    private int columns;
+
     public static MeshController getInstance() {
         if (instance == null) {
             instance = new MeshController();
@@ -25,39 +26,39 @@ public class MeshController implements IMeshController {
 
         return instance;
     }
-    
+
     private MeshController() {
         this.observers = new ArrayList<>();
     }
 
     @Override
     public void readAndCreateMatrix() {
-    	this.notifyMessage("Creating the road mesh");
+        this.notifyMessage("Creating the road mesh");
         try {
             @SuppressWarnings("resource")
-			Scanner input = new Scanner(new File("mesh/mesh3.txt"));
+            Scanner input = new Scanner(file);
             while (input.hasNextInt()) {
-                x = input.nextInt();
-                y = input.nextInt();
-                matrix = new RoadItem[x][y];
-                for (int i = 0; i < x; i++) {
-                    for (int j = 0; j < y; j++) {
+                lines = input.nextInt();
+                columns = input.nextInt();
+                matrix = new RoadItem[lines][columns];
+                for (int i = 0; i < lines; i++) {
+                    for (int j = 0; j < columns; j++) {
                         matrix[i][j] = new RoadItem();
                         switch (input.nextInt()) {
                             case 0:
                                 matrix[i][j].setImagePath("assets/default.png");
                                 break;
                             case 1:
-                                matrix[i][j].setImagePath("assets/up.png");
+                                checkEntryPointOnBottom(i, j);
                                 break;
                             case 2:
-                                matrix[i][j].setImagePath("assets/right.png");
+                                checkEntryPointOnLeft(i, j);
                                 break;
                             case 3:
-                                matrix[i][j].setImagePath("assets/down.png");
+                                checkEntryPointOnTop(i, j);
                                 break;
                             case 4:
-                                matrix[i][j].setImagePath("assets/left.png");
+                                checkEntryPointOnRight(i, j);
                                 break;
                             default:
                                 matrix[i][j].setImagePath("assets/stone.png");
@@ -70,19 +71,53 @@ public class MeshController implements IMeshController {
         }
     }
 
+    public void checkEntryPointOnTop(int x, int y) {
+        if (x - 1 < 0)
+            matrix[x][y].setEntryPoint(true);
+        matrix[x][y].setImagePath("assets/down.png");
+    }
+
+    public void checkEntryPointOnLeft(int x, int y) {
+        if (y - 1 < 0)
+            matrix[x][y].setEntryPoint(true);
+        matrix[x][y].setImagePath("assets/right.png");
+    }
+
+    public void checkEntryPointOnRight(int x, int y) {
+        if (y + 1 >= this.columns)
+            matrix[x][y].setEntryPoint(true);
+        matrix[x][y].setImagePath("assets/left.png");
+    }
+
+    public void checkEntryPointOnBottom(int x, int y) {
+        if (x + 1 >= this.lines)
+            matrix[x][y].setEntryPoint(true);
+        matrix[x][y].setImagePath("assets/up.png");
+    }
+
     @Override
     public String getMatrixPosition(int rowIndex, int columnIndex) {
         return matrix[rowIndex][columnIndex].getImagePath();
     }
-    
+
     @Override
-    public int getX() {
-        return x;
+    public File getFile() {
+        return file;
     }
 
     @Override
-    public int getY() {
-        return y;
+    public int getLines() {
+        return lines;
+    }
+
+    @Override
+    public int getColumns() {
+        return columns;
+    }
+
+    @Override
+    public void setPathName(File file) {
+        this.file = file;
     }
 
     @Override
@@ -94,7 +129,7 @@ public class MeshController implements IMeshController {
     public void removeObserver(Observer observer) {
         this.observers.remove(observer);
     }
-    
+
     @Override
     public void notifyMessage(String message) {
         for (Observer observer : observers) {

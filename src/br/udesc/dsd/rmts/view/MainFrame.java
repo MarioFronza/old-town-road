@@ -24,7 +24,7 @@ public class MainFrame extends JFrame implements Observer {
         super.setFocusTraversalKeysEnabled(false);
         super.setTitle("🐎 Old town road");
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        super.setResizable(true);
+        super.setResizable(false);
         super.setLayout(new BorderLayout());
         super.addWindowListener(new WindowAdapter() {
             @Override

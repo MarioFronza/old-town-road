@@ -16,12 +16,12 @@ public class RoadMeshPanel extends JPanel {
 
 		@Override
         public int getRowCount() {
-            return meshController.getX();
+            return meshController.getLines();
         }
 
         @Override
         public int getColumnCount() {
-            return meshController.getY();
+            return meshController.getColumns();
         }
 
         @Override

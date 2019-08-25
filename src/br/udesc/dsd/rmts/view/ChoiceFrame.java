@@ -1,5 +1,8 @@
 package br.udesc.dsd.rmts.view;
 
+import br.udesc.dsd.rmts.controller.IMeshController;
+import br.udesc.dsd.rmts.controller.MeshController;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -10,16 +13,10 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class ChoiceFrame extends JFrame {
@@ -27,6 +24,7 @@ public class ChoiceFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JButton buttonStart;
+	private JButton buttonSelectMeshFile;
 	private JTextField numberOfCars;
 	private JLabel labelCars;
 	private JTextField timeInterval;
@@ -35,15 +33,19 @@ public class ChoiceFrame extends JFrame {
 	private JLabel labelMechanisms;
 	private JPanel mechanisms;
 	private JPanel choice;
+	private IMeshController meshController;
 
 	public ChoiceFrame() {
-		super.setFocusable(true);
-		super.setFocusTraversalKeysEnabled(false);
 		super.setTitle("🐎 Old town road - New Simulation");
 		super.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		super.setResizable(false);
-		super.setVisible(true);
+		super.setFocusable(true);
+		super.setFocusTraversalKeysEnabled(false);
 		super.setLayout(new BorderLayout());
+		super.setPreferredSize(new Dimension(400, 230));
+		super.pack();
+		super.setLocationRelativeTo(null);
+		super.setVisible(true);
 		super.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent windowEvent) {
@@ -51,9 +53,10 @@ public class ChoiceFrame extends JFrame {
 			}
 		});
 
+		this.meshController = MeshController.getInstance();
+
 		initComponents();
 		addComponents();
-		start();
 	}
 
 	private void initComponents() {
@@ -99,6 +102,17 @@ public class ChoiceFrame extends JFrame {
 			}
 		});
 
+		this.buttonSelectMeshFile = new JButton();
+		this.buttonSelectMeshFile.setText("Select mesh file");
+		this.buttonSelectMeshFile.setAlignmentX(Component.CENTER_ALIGNMENT);
+		this.buttonSelectMeshFile.addActionListener((ActionEvent e) -> {
+			try {
+				FileChooser fileChooser = new FileChooser();
+			} catch (FileNotFoundException ex) {
+				ex.printStackTrace();
+			}
+		});
+
 	}
 
 	private void addComponents() {
@@ -111,6 +125,7 @@ public class ChoiceFrame extends JFrame {
 		this.choice.add(timeInterval);
 		this.choice.add(labelMechanisms);
 		this.choice.add(mechanisms);
+		this.choice.add(buttonSelectMeshFile);
 		this.choice.add(buttonStart);
 		super.add(this.choice);
 	}
@@ -135,6 +150,11 @@ public class ChoiceFrame extends JFrame {
 			JOptionPane.showMessageDialog(this, "Vehicle insertion range should be a number");
 			return false;
 		}
+
+		if(this.meshController.getFile() == null){
+			JOptionPane.showMessageDialog(this, "choose a file mesh to run the simulation");
+			return false;
+		}
 		
 		return true;
 	}
@@ -146,12 +166,6 @@ public class ChoiceFrame extends JFrame {
 	        return false;
 	    }
 	    return true;
-	}
-
-	public void start() {
-		super.setPreferredSize(new Dimension(400, 200));
-		super.pack();
-		super.setLocationRelativeTo(null);
 	}
 
 }
