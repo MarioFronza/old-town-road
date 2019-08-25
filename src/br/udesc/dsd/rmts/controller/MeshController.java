@@ -88,7 +88,6 @@ public class MeshController implements IMeshController {
                         matrix[i][j].getCar().start();
                         notifyRoadMeshUpdate();
                         System.out.println("show");
-
                     }
                 }
             }
@@ -98,7 +97,7 @@ public class MeshController implements IMeshController {
     @Override
     public void loadCarsInQueue() {
         for (int i = 0; i < numberOfCars; i++) {
-            cars.add(new Car("assets/car.png"));
+            cars.add(new Car());
         }
     }
 

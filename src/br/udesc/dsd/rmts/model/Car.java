@@ -4,14 +4,14 @@ public class Car extends Thread{
 
     private String imagePath;
 
-    public Car(String imagePath) {
-        this.imagePath = imagePath;
+    public Car() {
+        this.imagePath = "";
     }
 
     @Override
     public void run() {
         super.run();
-        System.out.println("Carr "+this.getId()+" andando...");
+        System.out.println("Car "+this.getId()+" andando...");
     }
 
     public String getImagePath() {
