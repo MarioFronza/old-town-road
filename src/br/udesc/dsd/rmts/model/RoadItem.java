@@ -53,6 +53,7 @@ public class RoadItem {
 
     public void setCar(Car car) {
         this.car = car;
+        this.car.setImagePath("assets/car"+direction+".png");
         setImagePath(car.getImagePath());
     }
 }
