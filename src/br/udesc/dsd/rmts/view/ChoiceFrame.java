@@ -4,17 +4,12 @@ import br.udesc.dsd.rmts.controller.IMeshController;
 import br.udesc.dsd.rmts.controller.MeshController;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -29,7 +24,9 @@ public class ChoiceFrame extends JFrame {
 	private JLabel labelCars;
 	private JTextField timeInterval;
 	private JLabel labelTimeInterval;
+	private ButtonGroup buttonGroup;
 	private JRadioButton mechanismSemaphore, mechanismMonitor;
+	private FileChooser fileChooser;
 	private JLabel labelMechanisms;
 	private JPanel mechanisms;
 	private JPanel choice;
@@ -72,7 +69,7 @@ public class ChoiceFrame extends JFrame {
 		this.numberOfCars.setMaximumSize(new Dimension(350, 20));
 		this.numberOfCars.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		this.labelTimeInterval = new JLabel("Vehicle insertion range:");
+		this.labelTimeInterval = new JLabel("Vehicle insertion range (in seconds):");
 		this.labelTimeInterval.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		this.timeInterval = new JTextField();
@@ -89,6 +86,8 @@ public class ChoiceFrame extends JFrame {
 
 		this.mechanismMonitor = new JRadioButton("Monitor");
 		this.mechanismMonitor.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		
+		this.buttonGroup = new ButtonGroup();
 
 		this.buttonStart = new JButton();
 		this.buttonStart.setText("Start simulation");
@@ -107,11 +106,8 @@ public class ChoiceFrame extends JFrame {
 		this.buttonSelectMeshFile.setText("Select mesh file");
 		this.buttonSelectMeshFile.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.buttonSelectMeshFile.addActionListener((ActionEvent e) -> {
-			try {
-				FileChooser fileChooser = new FileChooser();
-			} catch (FileNotFoundException ex) {
-				ex.printStackTrace();
-			}
+			this.fileChooser = new FileChooser();
+			this.buttonSelectMeshFile.setText(this.fileChooser.getChoosedFileName());
 		});
 
 	}
@@ -119,6 +115,9 @@ public class ChoiceFrame extends JFrame {
 	private void addComponents() {
 		this.mechanisms.add(mechanismMonitor);
 		this.mechanisms.add(mechanismSemaphore);
+		
+		this.buttonGroup.add(mechanismMonitor);
+		this.buttonGroup.add(mechanismSemaphore);
 
 		this.choice.add(labelCars);
 		this.choice.add(numberOfCars);
@@ -136,37 +135,32 @@ public class ChoiceFrame extends JFrame {
 			JOptionPane.showMessageDialog(this, "All fields are required");
 			return false;
 		}
-		
-		if (this.mechanismSemaphore.isSelected() && this.mechanismMonitor.isSelected()) {
-			JOptionPane.showMessageDialog(this, "Choose just one simulation mechanism");
-			return false;
-		}
-		
+
 		if (!isNumeric(this.numberOfCars.getText())) {
 			JOptionPane.showMessageDialog(this, "Number of cars should be a number");
 			return false;
 		}
-		
+
 		if (!isNumeric(this.timeInterval.getText())) {
 			JOptionPane.showMessageDialog(this, "Vehicle insertion range should be a number");
 			return false;
 		}
 
-		if(this.meshController.getFile() == null){
-			JOptionPane.showMessageDialog(this, "choose a file mesh to run the simulation");
+		if (this.meshController.getFile() == null) {
+			JOptionPane.showMessageDialog(this, "Choose a mesh file to run the simulation");
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean isNumeric(String strNum) {
-	    try {
-	        double d = Double.parseDouble(strNum);
-	    } catch (NumberFormatException | NullPointerException nfe) {
-	        return false;
-	    }
-	    return true;
+		try {
+			Double.parseDouble(strNum);
+		} catch (NumberFormatException | NullPointerException nfe) {
+			return false;
+		}
+		return true;
 	}
 
 }

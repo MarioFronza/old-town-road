@@ -5,23 +5,36 @@ import br.udesc.dsd.rmts.controller.MeshController;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 
 public class FileChooser extends JFileChooser {
 
-    private IMeshController meshController;
+	private static final long serialVersionUID = 1L;
+	private IMeshController meshController;
 
-    public FileChooser() throws FileNotFoundException {
-        super.getFileSystemView().getHomeDirectory();
+    public FileChooser() {
+        try {
+        	File workingDirectory = new File(System.getProperty("user.dir"));
+        	super.setCurrentDirectory(workingDirectory);
 
-        meshController = MeshController.getInstance();
+            this.meshController = MeshController.getInstance();
 
-        int returnValue = super.showOpenDialog(null);
+            int returnValue = super.showOpenDialog(null);
 
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = super.getSelectedFile();
-            meshController.setPathName(selectedFile);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = super.getSelectedFile();
+                meshController.setPathName(selectedFile);
+            }
+        } catch(Error err) {
+        	System.out.println("Hey, something went wrong when trying to get the file:" + err);
         }
+    }
+    
+    public String getChoosedFileName() {
+    	if (this.meshController.getFile() == null) {
+			return "Please, select a file";
+		} else {
+			return super.getSelectedFile().getName();
+		}
     }
 
 }
