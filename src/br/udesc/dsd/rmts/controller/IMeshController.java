@@ -12,10 +12,14 @@ public interface IMeshController extends Observed {
 
 	File getFile();
 
-	void setPathName(File file);
-	
 	int getLines();
 	
 	int getColumns();
+
+	int getNumberOfCars();
+
+	void setPathName(File file);
+
+	void setNumberOfCars(int numberOfCars);
 	
 }

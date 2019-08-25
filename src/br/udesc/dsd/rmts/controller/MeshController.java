@@ -18,6 +18,7 @@ public class MeshController implements IMeshController {
     private File file = null;
     private int lines;
     private int columns;
+    private int numberOfCars;
 
     public static MeshController getInstance() {
         if (instance == null) {
@@ -71,27 +72,39 @@ public class MeshController implements IMeshController {
         }
     }
 
+    public void runSimulation(){
+
+    }
+
     public void checkEntryPointOnTop(int x, int y) {
         if (x - 1 < 0)
             matrix[x][y].setEntryPoint(true);
+        else if (x + 1 >= this.lines)
+            matrix[x][y].setExitPoint(true);
         matrix[x][y].setImagePath("assets/down.png");
     }
 
     public void checkEntryPointOnLeft(int x, int y) {
         if (y - 1 < 0)
             matrix[x][y].setEntryPoint(true);
+        else if (y + 1 >= this.columns)
+            matrix[x][y].setExitPoint(true);
         matrix[x][y].setImagePath("assets/right.png");
     }
 
     public void checkEntryPointOnRight(int x, int y) {
         if (y + 1 >= this.columns)
             matrix[x][y].setEntryPoint(true);
+        else if (y - 1 < 0)
+            matrix[x][y].setExitPoint(true);
         matrix[x][y].setImagePath("assets/left.png");
     }
 
     public void checkEntryPointOnBottom(int x, int y) {
         if (x + 1 >= this.lines)
             matrix[x][y].setEntryPoint(true);
+        else if (x - 1 < 0)
+            matrix[x][y].setExitPoint(true);
         matrix[x][y].setImagePath("assets/up.png");
     }
 
@@ -116,8 +129,18 @@ public class MeshController implements IMeshController {
     }
 
     @Override
+    public int getNumberOfCars() {
+        return numberOfCars;
+    }
+
+    @Override
     public void setPathName(File file) {
         this.file = file;
+    }
+
+    @Override
+    public void setNumberOfCars(int numberOfCars) {
+        this.numberOfCars = numberOfCars;
     }
 
     @Override

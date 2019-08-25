@@ -13,12 +13,12 @@ public class MainFrame extends JFrame implements Observer {
 
 	private static final long serialVersionUID = 1L;
 	
-	private IMeshController haruController;
+	private IMeshController meshController;
 	private RoadMeshPanel roadMeshPanel;
 
     public MainFrame() {
-    	this.haruController = MeshController.getInstance();
-    	this.haruController.addObserver(this);
+    	this.meshController = MeshController.getInstance();
+    	this.meshController.addObserver(this);
     	
         super.setFocusable(true);
         super.setFocusTraversalKeysEnabled(false);
