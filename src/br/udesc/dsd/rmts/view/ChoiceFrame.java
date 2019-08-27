@@ -4,6 +4,7 @@ import br.udesc.dsd.rmts.controller.IMeshController;
 import br.udesc.dsd.rmts.controller.MeshController;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -69,7 +70,7 @@ public class ChoiceFrame extends JFrame {
 		this.numberOfCars.setMaximumSize(new Dimension(350, 20));
 		this.numberOfCars.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		this.labelTimeInterval = new JLabel("Vehicle insertion range (in seconds):");
+		this.labelTimeInterval = new JLabel("Vehicle insertion range (in milliseconds):");
 		this.labelTimeInterval.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		this.timeInterval = new JTextField();
@@ -78,6 +79,7 @@ public class ChoiceFrame extends JFrame {
 		this.timeInterval.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		this.mechanisms = new JPanel();
+		this.mechanisms.setForeground(Color.white);
 		this.labelMechanisms = new JLabel("Choose a mechanism:");
 		this.labelMechanisms.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -115,6 +117,7 @@ public class ChoiceFrame extends JFrame {
 	private void addComponents() {
 		this.mechanisms.add(mechanismMonitor);
 		this.mechanisms.add(mechanismSemaphore);
+		this.mechanisms.setBackground(Color.white);
 		
 		this.buttonGroup.add(mechanismMonitor);
 		this.buttonGroup.add(mechanismSemaphore);
@@ -127,6 +130,7 @@ public class ChoiceFrame extends JFrame {
 		this.choice.add(mechanisms);
 		this.choice.add(buttonSelectMeshFile);
 		this.choice.add(buttonStart);
+		this.choice.setBackground(Color.white);
 		super.add(this.choice);
 	}
 

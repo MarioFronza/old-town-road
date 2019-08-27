@@ -10,10 +10,9 @@ public class Car extends Thread{
 
     @Override
     public void run() {
-        super.run();
-        System.out.println("Car "+this.getId()+" andando...");
+        
     }
-
+ 
     public String getImagePath() {
         return imagePath;
     }
