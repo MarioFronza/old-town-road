@@ -1,7 +1,6 @@
 package br.udesc.dsd.rmts.controller;
 
 import br.udesc.dsd.rmts.controller.observer.Observer;
-import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
 
 import java.io.File;
@@ -10,10 +9,8 @@ import java.util.*;
 
 public class MeshController implements IMeshController {
 
-
     private static MeshController instance;
     private List<Observer> observers;
-    private Queue<Car> cars;
     private RoadItem matrix[][];
     private File file = null;
     private int lines;
@@ -31,7 +28,6 @@ public class MeshController implements IMeshController {
 
     private MeshController() {
         this.observers = new ArrayList<>();
-        this.cars = new LinkedList<>();
     }
 
     @Override
@@ -47,7 +43,8 @@ public class MeshController implements IMeshController {
                 for (int i = 0; i < lines; i++) {
                     for (int j = 0; j < columns; j++) {
                         matrix[i][j] = new RoadItem();
-                        switch (input.nextInt()) {
+                        int valueOfPositionOnMesh = input.nextInt();
+                        switch (valueOfPositionOnMesh) {
                             case 0:
                                 matrix[i][j].setImagePath("assets/default.png");
                                 break;
@@ -63,8 +60,9 @@ public class MeshController implements IMeshController {
                             case 4:
                                 checkEntryPointOnRight(i, j, 4);
                                 break;
-                            default:
-                                matrix[i][j].setImagePath("assets/stone.png");
+                            default: {
+                            	matrix[i][j].setImagePath("assets/stone.png");
+                            }
                         }
                     }
                 }
@@ -73,33 +71,12 @@ public class MeshController implements IMeshController {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void runSimulation() { //Colocar metodo em thread separada
-
-        loadCarsInQueue();
-
-        while (!cars.isEmpty())
-            for (int i = 0; i < lines; i++) {
-                for (int j = 0; j < columns; j++) {
-                    if (matrix[i][j].isEntryPoint() && !cars.isEmpty()) {
-                        //definir intervalo aqui
-                        matrix[i][j].setCar(cars.remove());
-                        matrix[i][j].getCar().start();
-                        notifyRoadMeshUpdate();
-                        System.out.println("show");
-                    }
-                }
-            }
-
-    }
-
-    @Override
-    public void loadCarsInQueue() {
-        for (int i = 0; i < numberOfCars; i++) {
-            cars.add(new Car());
-        }
-    }
+    
+	@Override
+	public void runSimulation() {
+		Simulation simulation = new Simulation();
+		simulation.start();
+	}
 
     @Override
     public void checkEntryPointOnTop(int x, int y, int direction) {
@@ -165,6 +142,11 @@ public class MeshController implements IMeshController {
     public void setPathName(File file) {
         this.file = file;
     }
+    
+    @Override
+    public int getTimeInterval() {
+        return this.timeInterval;
+    }
 
     @Override
     public void setTimeInterval(int timeInterval) {
@@ -199,5 +181,15 @@ public class MeshController implements IMeshController {
             observer.roadMeshUpdate();
         }
     }
+
+	@Override
+	public int getNumberOfCars() {
+		return this.numberOfCars;
+	}
+	
+	@Override
+	public RoadItem[][] getMatrix() {
+		return this.matrix;
+	}
 
 }
