@@ -19,6 +19,8 @@ public class MainFrame extends JFrame implements Observer {
     private RoadMeshPanel roadMeshPanel;
     private JButton buttonStartSimulation;
     private JButton buttonStopSimulation;
+    private JButton buttonOtherSimulation;
+    private JPanel info;
     private JPanel main;
 
     public MainFrame() {
@@ -31,6 +33,7 @@ public class MainFrame extends JFrame implements Observer {
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
         super.setResizable(false);
         super.setLayout(new BorderLayout());
+        super.getContentPane().setBackground(Color.WHITE);
         super.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
@@ -47,31 +50,74 @@ public class MainFrame extends JFrame implements Observer {
         this.roadMeshPanel = new RoadMeshPanel();
 
         this.main = new JPanel();
-        this.main.setLayout(new BoxLayout(this.main, BoxLayout.Y_AXIS));
-        this.main.setBorder(new EmptyBorder(new Insets(10, 0, 10, 0)));
+        this.main.setLayout(new GridBagLayout());
+        
+        this.info = new JPanel();
+        this.info.setLayout(new GridBagLayout());
+        this.info.setBorder(new EmptyBorder(10, 10, 10, 10));
+        final Dimension sizeButton = new Dimension(145, 25);
 
         this.buttonStartSimulation = new JButton();
         this.buttonStartSimulation.setText("Start simulation");
-        this.buttonStartSimulation.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.buttonStopSimulation.setForeground(new Color(85, 239, 196));
 		this.buttonStartSimulation.addActionListener((ActionEvent e) -> {
 			this.meshController.runSimulation();
+		});
+		
+		this.buttonOtherSimulation = new JButton();
+        this.buttonOtherSimulation.setText("Other simulation");
+        this.buttonOtherSimulation.setPreferredSize(sizeButton);
+		this.buttonOtherSimulation.addActionListener((ActionEvent e) -> {
+			ChoiceFrame choice = new ChoiceFrame();
+			choice.setVisible(true);
+			super.setVisible(false);
 		});
 
         this.buttonStopSimulation = new JButton();
         this.buttonStopSimulation.setText("Stop simulation");
-        this.buttonStopSimulation.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.buttonStopSimulation.setForeground(new Color(250, 177, 160));
+        this.buttonStopSimulation.setPreferredSize(sizeButton);
     }
 
     private void addComponents() {
-        this.main.add(buttonStartSimulation);
-        this.main.add(buttonStopSimulation);
-        this.main.add(this.roadMeshPanel);
-        this.main.setBackground(new Color(121, 121, 121));
+        GridBagConstraints cons;
+        
+        cons = new GridBagConstraints();
+    	cons.gridy = 0;
+    	cons.gridx = 0;
+    	cons.anchor = GridBagConstraints.FIRST_LINE_START;
+        this.info.add(this.buttonStartSimulation, cons);
+
+    	cons = new GridBagConstraints();
+    	cons.gridy = 1;
+    	cons.gridx = 0;
+    	cons.anchor = GridBagConstraints.FIRST_LINE_START;
+    	this.info.add(this.buttonStopSimulation, cons);
+    	
+        cons = new GridBagConstraints();
+    	cons.gridy = 2;
+    	cons.gridx = 0;
+    	cons.anchor = GridBagConstraints.FIRST_LINE_START;
+    	this.info.add(this.buttonOtherSimulation, cons);
+        
+    	cons = new GridBagConstraints();
+    	cons.gridy = 0;
+    	cons.gridx = 0;
+    	cons.anchor = GridBagConstraints.NORTH;
+        this.main.add(this.info, cons);
+        
+        cons = new GridBagConstraints();
+    	cons.gridy = 0;
+    	cons.gridx = 1;
+        
+    	this.main.add(this.roadMeshPanel, cons);
+    	
+        this.info.setBackground(Color.WHITE);
+        this.main.setBackground(Color.WHITE);
         super.add(this.main);
     }
 
-    private void start() {
-        super.setPreferredSize(new Dimension(roadMeshPanel.getWidth(), roadMeshPanel.getHeigth() + 91));
+	private void start() {
         super.pack();
         super.setLocationRelativeTo(null);
     }
@@ -83,7 +129,7 @@ public class MainFrame extends JFrame implements Observer {
 
     @Override
     public void roadMeshUpdate() {
-//        this.roadMeshPanel.updateUI();
+    	this.roadMeshPanel.updateUI();
     }
 
 }

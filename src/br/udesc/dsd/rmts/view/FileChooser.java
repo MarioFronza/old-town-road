@@ -17,6 +17,7 @@ public class FileChooser extends JFileChooser {
         	super.setCurrentDirectory(workingDirectory);
 
             this.meshController = MeshController.getInstance();
+            this.meshController.setPathName(null);
 
             int returnValue = super.showOpenDialog(null);
 
