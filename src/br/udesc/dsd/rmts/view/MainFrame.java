@@ -59,7 +59,7 @@ public class MainFrame extends JFrame implements Observer {
 
         this.buttonStartSimulation = new JButton();
         this.buttonStartSimulation.setText("Start simulation");
-        this.buttonStopSimulation.setForeground(new Color(85, 239, 196));
+        this.buttonStartSimulation.setForeground(new Color(85, 239, 196));
 		this.buttonStartSimulation.addActionListener((ActionEvent e) -> {
 			this.meshController.runSimulation();
 		});
