@@ -32,7 +32,6 @@ public class MeshController implements IMeshController {
 
     @Override
     public void readAndCreateMatrix() {
-        this.notifyMessage("Creating the road mesh");
         try {
             @SuppressWarnings("resource")
             Scanner input = new Scanner(file);
@@ -42,7 +41,7 @@ public class MeshController implements IMeshController {
                 matrix = new RoadItem[lines][columns];
                 for (int i = 0; i < lines; i++) {
                     for (int j = 0; j < columns; j++) {
-                        matrix[i][j] = new RoadItem();
+                        matrix[i][j] = new RoadItem(i, j);
                         int valueOfPositionOnMesh = input.nextInt();
                         switch (valueOfPositionOnMesh) {
                             case 0:
@@ -61,7 +60,7 @@ public class MeshController implements IMeshController {
                                 checkEntryPointOnRight(i, j, 4);
                                 break;
                             default: {
-                            	matrix[i][j].setImagePath("assets/stone.png");
+                                checkCrossPont(i, j, valueOfPositionOnMesh);
                             }
                         }
                     }
@@ -71,12 +70,17 @@ public class MeshController implements IMeshController {
             e.printStackTrace();
         }
     }
-    
-	@Override
-	public void runSimulation() {
-		Simulation simulation = new Simulation();
-		simulation.start();
-	}
+
+    public void checkCrossPont(int x, int y, int direction) {
+        matrix[x][y].setImagePath("assets/stone.png");
+        matrix[x][y].setDirection(direction);
+    }
+
+    @Override
+    public void runSimulation() {
+        Simulation simulation = new Simulation();
+        simulation.start();
+    }
 
     @Override
     public void checkEntryPointOnTop(int x, int y, int direction) {
@@ -142,7 +146,7 @@ public class MeshController implements IMeshController {
     public void setPathName(File file) {
         this.file = file;
     }
-    
+
     @Override
     public int getTimeInterval() {
         return this.timeInterval;
@@ -182,14 +186,14 @@ public class MeshController implements IMeshController {
         }
     }
 
-	@Override
-	public int getNumberOfCars() {
-		return this.numberOfCars;
-	}
-	
-	@Override
-	public RoadItem[][] getMatrix() {
-		return this.matrix;
-	}
+    @Override
+    public int getNumberOfCars() {
+        return this.numberOfCars;
+    }
+
+    @Override
+    public RoadItem[][] getMatrix() {
+        return this.matrix;
+    }
 
 }
