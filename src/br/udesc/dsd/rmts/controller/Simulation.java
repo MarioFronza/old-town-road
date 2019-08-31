@@ -25,12 +25,11 @@ public class Simulation extends Thread {
             for (int i = 0; i < this.meshController.getLines(); i++) {
                 for (int j = 0; j < this.meshController.getColumns(); j++) {
                     if (matrix[i][j].isEntryPoint() && !cars.isEmpty()) {
-                        System.out.println(i + "-" + j + "eh um ponto de entrada!");
                         try {
                             sleep(this.meshController.getTimeInterval() * 1000);
-                            matrix[i][j].setCar(cars.remove());
-                            matrix[i][j].getCar().defineRoute(i, j);
-                           // matrix[i][j].getCar().start();
+                            RoadItem item = matrix[i][j];
+                            this.meshController.addCar(cars.remove(), item.getX(), item.getY());
+                            this.meshController.defineRouteAndStartThreaad(item.getX(), item.getY());
                             this.meshController.notifyRoadMeshUpdate();
                         } catch (InterruptedException e) {
                             e.printStackTrace();

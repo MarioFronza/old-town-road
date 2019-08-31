@@ -1,8 +1,5 @@
 package br.udesc.dsd.rmts.model;
 
-
-import br.udesc.dsd.rmts.controller.MeshController;
-
 import java.util.concurrent.Semaphore;
 
 public class RoadItem {
@@ -62,34 +59,36 @@ public class RoadItem {
         return car;
     }
 
-    public void setCar(Car car) {
+    public void addCar(Car car) {
         this.car = car;
-        this.car.setImagePath("assets/car" + direction + ".png");
-        setImagePath(car.getImagePath());
+        if (direction > 4) {
+            setImagePath("assets/car" + 1 + ".png");
+        } else {
+            setImagePath("assets/car" + this.direction + ".png");
+        }
     }
 
-    public void addCart(int x, int y) {
-        setCar(new Car());
+    public void removeCar() {
+        this.car = null;
+        if (direction > 4) {
+            setImagePath("assets/stone.png");
+        } else {
+            setImagePath("assets/road" + this.direction + ".png");
+        }
     }
 
-    public void alocar() {
+    public void acquireRoadItem() {
         try {
             this.mutex.acquire();
-            //veriricar permicao
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void liberar(){
+    public void releaseRoadItem() {
         this.mutex.release();
     }
 
-    public void removeCart() {
-        this.car = null;
-        this.car.setImagePath("assets/car" + direction + ".png");
-        setImagePath(car.getImagePath());
-    }
 
     public int getX() {
         return x;

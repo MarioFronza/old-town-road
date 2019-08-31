@@ -1,11 +1,13 @@
 package br.udesc.dsd.rmts.controller;
 
 import br.udesc.dsd.rmts.controller.observer.Observer;
+import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+
 
 public class MeshController implements IMeshController {
 
@@ -82,6 +84,31 @@ public class MeshController implements IMeshController {
         simulation.start();
     }
 
+
+    public void addCar(Car car, int x, int y) {
+        this.matrix[x][y].addCar(car);
+        notifyRoadMeshUpdate();
+    }
+
+    public void removeCar(int x, int y) {
+        this.matrix[x][y].removeCar();
+        notifyRoadMeshUpdate();
+    }
+
+    public void acquireRoadItem(int x, int y) {
+        this.matrix[x][y].acquireRoadItem();
+    }
+
+    public void releaseRoadItem(int x, int y) {
+        this.matrix[x][y].releaseRoadItem();
+    }
+
+    public void defineRouteAndStartThreaad(int x, int y) {
+        this.matrix[x][y].getCar().defineRoute(x, y);
+        this.matrix[x][y].getCar().setCurrentRoad(matrix[x][y]);
+        this.matrix[x][y].getCar().start();
+    }
+
     @Override
     public void checkEntryPointOnTop(int x, int y, int direction) {
         if (x - 1 < 0)
@@ -89,7 +116,7 @@ public class MeshController implements IMeshController {
         else if (x + 1 >= this.lines)
             matrix[x][y].setExitPoint(true);
         matrix[x][y].setDirection(direction);
-        matrix[x][y].setImagePath("assets/down.png");
+        matrix[x][y].setImagePath("assets/road" + direction + ".png");
     }
 
     @Override
@@ -99,7 +126,7 @@ public class MeshController implements IMeshController {
         else if (y + 1 >= this.columns)
             matrix[x][y].setExitPoint(true);
         matrix[x][y].setDirection(direction);
-        matrix[x][y].setImagePath("assets/right.png");
+        matrix[x][y].setImagePath("assets/road" + direction + ".png");
     }
 
     @Override
@@ -109,7 +136,7 @@ public class MeshController implements IMeshController {
         else if (y - 1 < 0)
             matrix[x][y].setExitPoint(true);
         matrix[x][y].setDirection(direction);
-        matrix[x][y].setImagePath("assets/left.png");
+        matrix[x][y].setImagePath("assets/road" + direction + ".png");
     }
 
     @Override
@@ -119,7 +146,7 @@ public class MeshController implements IMeshController {
         else if (x - 1 < 0)
             matrix[x][y].setExitPoint(true);
         matrix[x][y].setDirection(direction);
-        matrix[x][y].setImagePath("assets/up.png");
+        matrix[x][y].setImagePath("assets/road" + direction + ".png");
     }
 
     @Override

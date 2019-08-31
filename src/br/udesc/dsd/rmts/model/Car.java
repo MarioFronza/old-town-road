@@ -1,42 +1,50 @@
 package br.udesc.dsd.rmts.model;
 
+import br.udesc.dsd.rmts.controller.IMeshController;
 import br.udesc.dsd.rmts.controller.MeshController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Car extends Thread {
 
-    private String imagePath;
-    private List<RoadItem> route;
+    private String setImagePath;
+    private Queue<RoadItem> route;
     private RoadItem matrix[][];
     private int currentX;
     private int currentY;
     private RoadItem currentRoad;
+    private IMeshController meshController;
 
     public Car() {
-        this.imagePath = "";
-        this.route = new ArrayList<>();
-        this.matrix = MeshController.getInstance().getMatrix();
+        this.setImagePath = "";
+        this.route = new LinkedList<>();
+        this.meshController = MeshController.getInstance();
+        this.matrix = meshController.getMatrix();
         this.currentRoad = null;
     }
 
     @Override
     public void run() {
 
-        while (true) {
+        while (!route.isEmpty()) {
             boolean andou = false;
             do {
                 try {
-                    RoadItem item = route.remove(0);
-                    item.alocar();
-                    item.addCart(item.getX(), item.getY());
 
-                    currentRoad.removeCart(); //retirar carro
-                    item.liberar();
-                    currentRoad = item;
+                    RoadItem item = route.remove();
 
+                    this.meshController.acquireRoadItem(item.getX(), item.getY());
+                    this.meshController.addCar(this, item.getX(), item.getY());
+                    this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
+                    this.currentRoad = item;
+                    andou = true;
+                    
+                    this.meshController.releaseRoadItem(item.getX(), item.getY());
+                    try {
+                        sleep(200);
+                    } catch (Exception ie) {
+                        ie.printStackTrace();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     try {
@@ -48,14 +56,7 @@ public class Car extends Thread {
 
             } while (!andou);
         }
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+        this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
     }
 
     public void defineRoute(int x, int y) {
@@ -69,41 +70,48 @@ public class Car extends Thread {
                     if (!isCrossroad(currentX, currentY))
                         this.currentX--;
                     else
-                        validateCrossRodad(matrix[currentX][currentY].getDirection());
+                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
                     break;
                 case 2:
                     if (!isCrossroad(currentX, currentY))
                         this.currentY++;
                     else
-                        validateCrossRodad(matrix[currentX][currentY].getDirection());
+                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
                     break;
                 case 3:
                     if (!isCrossroad(currentX, currentY))
                         this.currentX++;
                     else
-                        validateCrossRodad(matrix[currentX][currentY].getDirection());
+                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
                     break;
                 case 4:
                     if (!isCrossroad(currentX, currentY))
                         this.currentY--;
                     else
-                        validateCrossRodad(matrix[currentX][currentY].getDirection());
+                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
                     break;
                 default:
-                    validateCrossRodad(matrix[currentX][currentY].getDirection());
+                    chooseCrossRoad(matrix[currentX][currentY].getDirection());
                     break;
             }
-            route.add(new RoadItem(currentX, currentY));
+            route.add(matrix[currentX][currentY]);
             if (matrix[currentX][currentY].isExitPoint())
                 isExitPoint = true;
         }
-
-        for (RoadItem roadItem : route) {
-            System.out.print(roadItem.getX() + "-" + roadItem.getY() + " ");
-        }
     }
 
-    public void validateCrossRodad(int direction) {
+    public boolean isCrossroad(int x, int y) {
+        boolean crossroad = false;
+        for (int i = 5; i <= 12; i++)
+            if (matrix[x][y].getDirection() == i) {
+                crossroad = true;
+            }
+
+
+        return crossroad;
+    }
+
+    public void chooseCrossRoad(int direction) {
         Random random = new Random();
         int num;
 
@@ -136,7 +144,6 @@ public class Car extends Thread {
                 break;
             case 11:
                 num = random.nextInt(2);
-                System.out.println(num);
                 if (num == 0)
                     this.currentY++;
                 else
@@ -152,16 +159,18 @@ public class Car extends Thread {
         }
     }
 
-    public boolean isCrossroad(int x, int y) {
-        boolean crossroad = false;
-        for (int i = 5; i <= 12; i++)
-            if (matrix[x][y].getDirection() == i) {
-                crossroad = true;
-            }
-
-
-        return crossroad;
+    public String getImagePath() {
+        return setImagePath;
     }
+
+    public void setImagePath(String setImagePath) {
+        this.setImagePath = setImagePath;
+    }
+
+    public void setCurrentRoad(RoadItem currentRoad) {
+        this.currentRoad = currentRoad;
+    }
+
 
 }
 
