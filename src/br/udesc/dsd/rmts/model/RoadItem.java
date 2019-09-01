@@ -1,5 +1,7 @@
 package br.udesc.dsd.rmts.model;
 
+import java.util.concurrent.Semaphore;
+
 public class RoadItem {
 
     private String imagePath;
@@ -7,12 +9,18 @@ public class RoadItem {
     private boolean isExitPoint;
     private int direction;
     private Car car;
+    private int x;
+    private int y;
+    private Semaphore mutex;
 
-    public RoadItem() {
+    public RoadItem(int x, int y) {
         this.isEntryPoint = false;
         this.isExitPoint = false;
         this.car = null;
         this.direction = 0;
+        this.x = x;
+        this.y = y;
+        this.mutex = new Semaphore(1);
     }
 
     public String getImagePath() {
@@ -51,9 +59,42 @@ public class RoadItem {
         return car;
     }
 
-    public void setCar(Car car) {
+    public void addCar(Car car) {
         this.car = car;
-        this.car.setImagePath("assets/car"+direction+".png");
-        setImagePath(car.getImagePath());
+        if (direction > 4) {
+            setImagePath("assets/car" + 1 + ".png");
+        } else {
+            setImagePath("assets/car" + this.direction + ".png");
+        }
+    }
+
+    public void removeCar() {
+        this.car = null;
+        if (direction > 4) {
+            setImagePath("assets/stone.png");
+        } else {
+            setImagePath("assets/road" + this.direction + ".png");
+        }
+    }
+
+    public void acquireRoadItem() {
+        try {
+            this.mutex.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void releaseRoadItem() {
+        this.mutex.release();
+    }
+
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }
