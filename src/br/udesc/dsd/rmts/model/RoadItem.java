@@ -23,6 +23,74 @@ public class RoadItem {
         this.mutex = new Semaphore(1);
     }
 
+    public void addCar(Car car) {
+        this.car = car;
+        setImageByDirection();
+    }
+
+    public void removeCar() {
+        this.car = null;
+        if (direction > 4) {
+            setImagePath("assets/stone.png");
+        } else {
+            setImagePath("assets/road" + this.direction + ".png");
+        }
+    }
+
+    public void acquireRoadItem() {
+        try {
+            assert mutex.availablePermits() == 1 : "Mutex deveria ser igual a 1";
+            this.mutex.acquire();
+            if (this.car != null)
+                throw new Exception("Tem carro");
+
+            assert mutex.availablePermits() == 0 : "Mutex deveria ser igual a 0";
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void releaseRoadItem() {
+        assert mutex.availablePermits() == 0 : "Mutex deveria ser igual a 0";
+        this.mutex.release();
+        if (this.car == null)
+            try {
+                throw new Exception("n tem carro");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        assert mutex.availablePermits() == 1 : "Mutex deveria ser igual a 1";
+    }
+
+    public void setImageByDirection() {
+        if (direction > 4) {
+            setImagePath("assets/stone.png");
+            if (direction == 5 || direction == 9 || direction == 10)
+                setImagePath("assets/" + car.getColor() + "car" + 1 + ".png");
+
+            if (direction == 6 || direction == 11)
+                setImagePath("assets/" + car.getColor() + "car" + 2 + ".png");
+
+            if (direction == 7 || direction == 12)
+                setImagePath("assets/" + car.getColor() + "car" + 3 + ".png");
+
+            if (direction == 8)
+                setImagePath("assets/" + car.getColor() + "car" + 4 + ".png");
+        } else {
+            setImagePath("assets/" + car.getColor() + "car" + this.direction + ".png");
+        }
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     public String getImagePath() {
         return imagePath;
     }
@@ -57,44 +125,5 @@ public class RoadItem {
 
     public Car getCar() {
         return car;
-    }
-
-    public void addCar(Car car) {
-        this.car = car;
-        if (direction > 4) {
-            setImagePath("assets/car" + 1 + ".png");
-        } else {
-            setImagePath("assets/car" + this.direction + ".png");
-        }
-    }
-
-    public void removeCar() {
-        this.car = null;
-        if (direction > 4) {
-            setImagePath("assets/stone.png");
-        } else {
-            setImagePath("assets/road" + this.direction + ".png");
-        }
-    }
-
-    public void acquireRoadItem() {
-        try {
-            this.mutex.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void releaseRoadItem() {
-        this.mutex.release();
-    }
-
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 }

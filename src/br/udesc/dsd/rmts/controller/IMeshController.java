@@ -5,6 +5,7 @@ import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
 
 import java.io.File;
+import java.util.Queue;
 
 public interface IMeshController extends Observed {
 

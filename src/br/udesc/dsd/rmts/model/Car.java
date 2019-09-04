@@ -4,23 +4,37 @@ import br.udesc.dsd.rmts.controller.IMeshController;
 import br.udesc.dsd.rmts.controller.MeshController;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 public class Car extends Thread {
 
-    private String setImagePath;
     private Queue<RoadItem> route;
     private RoadItem matrix[][];
     private int currentX;
     private int currentY;
     private RoadItem currentRoad;
     private IMeshController meshController;
+    private String color;
+    private int velocidade;
 
-    public Car() {
-        this.setImagePath = "";
+    public Car(int type) {
         this.route = new LinkedList<>();
         this.meshController = MeshController.getInstance();
         this.matrix = meshController.getMatrix();
         this.currentRoad = null;
+        Random random = new Random();
+        this.velocidade = random.nextInt(300) + 100;
+        switch (type) {
+            case 0:
+                this.color = "red";
+                break;
+            case 1:
+                this.color = "blue";
+                break;
+            case 2:
+                this.color = "green";
+                break;
+        }
     }
 
     @Override
@@ -32,16 +46,15 @@ public class Car extends Thread {
                 try {
 
                     RoadItem item = route.remove();
-
                     this.meshController.acquireRoadItem(item.getX(), item.getY());
                     this.meshController.addCar(this, item.getX(), item.getY());
                     this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
                     this.currentRoad = item;
                     andou = true;
-                    
                     this.meshController.releaseRoadItem(item.getX(), item.getY());
+
                     try {
-                        sleep(200);
+                        sleep(velocidade);
                     } catch (Exception ie) {
                         ie.printStackTrace();
                     }
@@ -100,7 +113,7 @@ public class Car extends Thread {
         }
     }
 
-    public boolean isCrossroad(int x, int y) {
+    private boolean isCrossroad(int x, int y) {
         boolean crossroad = false;
         for (int i = 5; i <= 12; i++)
             if (matrix[x][y].getDirection() == i) {
@@ -111,7 +124,7 @@ public class Car extends Thread {
         return crossroad;
     }
 
-    public void chooseCrossRoad(int direction) {
+    private void chooseCrossRoad(int direction) {
         Random random = new Random();
         int num;
 
@@ -159,12 +172,8 @@ public class Car extends Thread {
         }
     }
 
-    public String getImagePath() {
-        return setImagePath;
-    }
-
-    public void setImagePath(String setImagePath) {
-        this.setImagePath = setImagePath;
+    public String getColor() {
+        return color;
     }
 
     public void setCurrentRoad(RoadItem currentRoad) {

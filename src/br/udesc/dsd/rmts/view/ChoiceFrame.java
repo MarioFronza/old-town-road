@@ -83,10 +83,10 @@ public class ChoiceFrame extends JFrame {
 		this.labelMechanisms = new JLabel("Choose a mechanism:");
 		this.labelMechanisms.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		this.mechanismSemaphore = new JRadioButton("Semaphore");
+		this.mechanismSemaphore = new JRadioButton("RoadItemSemaphore");
 		this.mechanismSemaphore.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-		this.mechanismMonitor = new JRadioButton("Monitor");
+		this.mechanismMonitor = new JRadioButton("RoadItemMonitor");
 		this.mechanismMonitor.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		
 		this.buttonGroup = new ButtonGroup();
