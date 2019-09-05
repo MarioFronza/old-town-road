@@ -70,7 +70,7 @@ public class ChoiceFrame extends JFrame {
 		this.numberOfCars.setMaximumSize(new Dimension(350, 20));
 		this.numberOfCars.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		this.labelTimeInterval = new JLabel("Vehicle insertion range (in milliseconds):");
+		this.labelTimeInterval = new JLabel("Vehicle insertion range (in seconds):");
 		this.labelTimeInterval.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		this.timeInterval = new JTextField();
@@ -90,7 +90,6 @@ public class ChoiceFrame extends JFrame {
 		this.mechanismMonitor.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		
 		this.buttonGroup = new ButtonGroup();
-
 		this.buttonStart = new JButton();
 		this.buttonStart.setText("Start simulation");
 		this.buttonStart.setAlignmentX(Component.CENTER_ALIGNMENT);

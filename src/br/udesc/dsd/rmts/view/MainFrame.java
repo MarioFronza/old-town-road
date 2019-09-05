@@ -20,7 +20,9 @@ public class MainFrame extends JFrame implements Observer {
     private JButton buttonStartSimulation;
     private JButton buttonStopSimulation;
     private JButton buttonOtherSimulation;
+    private JPanel buttons;
     private JPanel info;
+    private JLabel allInformation;
     private JPanel main;
 
     public MainFrame() {
@@ -53,19 +55,28 @@ public class MainFrame extends JFrame implements Observer {
         this.main.setLayout(new GridBagLayout());
         
         this.info = new JPanel();
-        this.info.setLayout(new GridBagLayout());
         this.info.setBorder(new EmptyBorder(10, 10, 10, 10));
+        this.info.setLayout(new GridBagLayout());
+        
+        this.allInformation = new JLabel();
+        this.allInformation.setBorder(new EmptyBorder(10, 10, 10, 10));
+        this.allInformation.setText(this.meshController.getGeneralInformation());
+        
+        this.buttons = new JPanel();
+        this.buttons.setLayout(new GridBagLayout());
+        this.buttons.setBorder(new EmptyBorder(10, 10, 10, 10));
         final Dimension sizeButton = new Dimension(145, 25);
 
         this.buttonStartSimulation = new JButton();
         this.buttonStartSimulation.setText("Start simulation");
-        this.buttonStartSimulation.setForeground(new Color(85, 239, 196));
+        this.buttonStartSimulation.setForeground(new Color(0, 184, 148));
 		this.buttonStartSimulation.addActionListener((ActionEvent e) -> {
 			this.meshController.runSimulation();
 		});
 		
 		this.buttonOtherSimulation = new JButton();
         this.buttonOtherSimulation.setText("Other simulation");
+        this.buttonOtherSimulation.setForeground(new Color(99, 110, 114));
         this.buttonOtherSimulation.setPreferredSize(sizeButton);
 		this.buttonOtherSimulation.addActionListener((ActionEvent e) -> {
 			ChoiceFrame choice = new ChoiceFrame();
@@ -86,32 +97,38 @@ public class MainFrame extends JFrame implements Observer {
     	cons.gridy = 0;
     	cons.gridx = 0;
     	cons.anchor = GridBagConstraints.FIRST_LINE_START;
-        this.info.add(this.buttonStartSimulation, cons);
+        this.buttons.add(this.buttonStartSimulation, cons);
 
     	cons = new GridBagConstraints();
     	cons.gridy = 1;
     	cons.gridx = 0;
     	cons.anchor = GridBagConstraints.FIRST_LINE_START;
-    	this.info.add(this.buttonStopSimulation, cons);
+    	this.buttons.add(this.buttonStopSimulation, cons);
     	
         cons = new GridBagConstraints();
     	cons.gridy = 2;
     	cons.gridx = 0;
     	cons.anchor = GridBagConstraints.FIRST_LINE_START;
-    	this.info.add(this.buttonOtherSimulation, cons);
+    	this.buttons.add(this.buttonOtherSimulation, cons);
+    	
+        cons = new GridBagConstraints();
+    	cons.gridy = 3;
+    	cons.gridx = 0;
+    	cons.anchor = GridBagConstraints.FIRST_LINE_START;
+    	this.buttons.add(this.allInformation, cons);
         
     	cons = new GridBagConstraints();
     	cons.gridy = 0;
     	cons.gridx = 0;
     	cons.anchor = GridBagConstraints.NORTH;
-        this.main.add(this.info, cons);
+        this.main.add(this.buttons, cons);
         
         cons = new GridBagConstraints();
     	cons.gridy = 0;
     	cons.gridx = 1;
-        
-    	this.main.add(this.roadMeshPanel, cons);
+        this.main.add(this.roadMeshPanel, cons);
     	
+        this.buttons.setBackground(Color.WHITE);
         this.info.setBackground(Color.WHITE);
         this.main.setBackground(Color.WHITE);
         super.add(this.main);

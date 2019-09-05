@@ -35,6 +35,8 @@ public interface IMeshController extends Observed {
     
     int getTimeInterval();
     
+    String getGeneralInformation();
+    
     int getNumberOfCars();
     
     RoadItem[][] getMatrix();

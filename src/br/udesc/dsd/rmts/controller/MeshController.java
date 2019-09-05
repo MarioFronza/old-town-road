@@ -192,4 +192,14 @@ public class MeshController implements IMeshController {
 		return this.matrix;
 	}
 
+	@Override
+	public String getGeneralInformation() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("<html><body>Time interval: " + this.getTimeInterval() + "<br />");
+		builder.append("Number of cars: " + this.getNumberOfCars() + "<br>"); 
+		builder.append("Filename: " + this.file.getName() + "<br></body></html>");
+		
+		return builder.toString();
+	}
+
 }
