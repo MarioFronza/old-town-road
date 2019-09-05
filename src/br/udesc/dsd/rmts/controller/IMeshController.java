@@ -5,7 +5,6 @@ import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
 
 import java.io.File;
-import java.util.Queue;
 
 public interface IMeshController extends Observed {
 
@@ -14,10 +13,6 @@ public interface IMeshController extends Observed {
     void addCar(Car car, int x, int y);
 
     void removeCar(int x, int y);
-
-    void acquireRoadItem(int x, int y);
-
-    void releaseRoadItem(int x, int y);
 
     void defineRouteAndStartThreaad(int x, int y);
 
@@ -36,7 +31,7 @@ public interface IMeshController extends Observed {
     int getLines();
 
     int getColumns();
-    
+
     void runSimulation();
 
     void setPathName(File file);
@@ -44,11 +39,11 @@ public interface IMeshController extends Observed {
     void setNumberOfCars(int numberOfCars);
 
     void setTimeInterval(int timeInterval);
-    
+
     int getTimeInterval();
-    
+
     int getNumberOfCars();
-    
+
     RoadItem[][] getMatrix();
 
 }

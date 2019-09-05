@@ -1,17 +1,14 @@
 package br.udesc.dsd.rmts.model;
 
-import java.util.concurrent.Semaphore;
+public abstract class RoadItem {
 
-public class RoadItem {
-
-    private String imagePath;
-    private boolean isEntryPoint;
-    private boolean isExitPoint;
-    private int direction;
-    private Car car;
-    private int x;
-    private int y;
-    private Semaphore mutex;
+    protected String imagePath;
+    protected boolean isEntryPoint;
+    protected boolean isExitPoint;
+    protected int direction;
+    protected Car car;
+    protected int x;
+    protected int y;
 
     public RoadItem(int x, int y) {
         this.isEntryPoint = false;
@@ -20,64 +17,58 @@ public class RoadItem {
         this.direction = 0;
         this.x = x;
         this.y = y;
-        this.mutex = new Semaphore(1);
     }
 
-    public void addCar(Car car) {
-        this.car = car;
-        setImageByDirection();
-    }
+    public abstract void addCar(Car car);
 
-    public void removeCar() {
-        this.car = null;
-        if (direction > 4) {
-            setImagePath("assets/stone.png");
-        } else {
-            setImagePath("assets/road" + this.direction + ".png");
-        }
-    }
-
-    public void acquireRoadItem() {
-        try {
-            assert mutex.availablePermits() == 1 : "Mutex deveria ser igual a 1";
-            this.mutex.acquire();
-            if (this.car != null)
-                throw new Exception("Tem carro");
-
-            assert mutex.availablePermits() == 0 : "Mutex deveria ser igual a 0";
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void releaseRoadItem() {
-        assert mutex.availablePermits() == 0 : "Mutex deveria ser igual a 0";
-        this.mutex.release();
-        if (this.car == null)
-            try {
-                throw new Exception("n tem carro");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        assert mutex.availablePermits() == 1 : "Mutex deveria ser igual a 1";
-    }
+    public abstract void removeCar();
 
     public void setImageByDirection() {
         if (direction > 4) {
             setImagePath("assets/stone.png");
-            if (direction == 5 || direction == 9 || direction == 10)
+            if (direction == 5)
                 setImagePath("assets/" + car.getColor() + "car" + 1 + ".png");
 
-            if (direction == 6 || direction == 11)
+            if (direction == 6)
                 setImagePath("assets/" + car.getColor() + "car" + 2 + ".png");
 
-            if (direction == 7 || direction == 12)
+            if (direction == 7)
                 setImagePath("assets/" + car.getColor() + "car" + 3 + ".png");
 
             if (direction == 8)
                 setImagePath("assets/" + car.getColor() + "car" + 4 + ".png");
+
+            if (direction == 9) {
+                if (car.getCurrentRoad().getDirection() <= 4) {
+                    setImagePath("assets/" + car.getColor() + "car" + 1 + ".png");
+                } else {
+                    setImagePath("assets/" + car.getColor() + "car" + 2 + ".png");
+                }
+            }
+
+            if (direction == 10) {
+                if (car.getCurrentRoad().getDirection() <= 4) {
+                    setImagePath("assets/" + car.getColor() + "car" + 4 + ".png");
+                } else {
+                    setImagePath("assets/" + car.getColor() + "car" + 1 + ".png");
+                }
+            }
+
+            if (direction == 11) {
+                if (car.getCurrentRoad().getDirection() <= 4) {
+                    setImagePath("assets/" + car.getColor() + "car" + 2 + ".png");
+                } else {
+                    setImagePath("assets/" + car.getColor() + "car" + 3 + ".png");
+                }
+            }
+
+            if (direction == 12) {
+                if (car.getCurrentRoad().getDirection() <= 4) {
+                    setImagePath("assets/" + car.getColor() + "car" + 3 + ".png");
+                } else {
+                    setImagePath("assets/" + car.getColor() + "car" + 4 + ".png");
+                }
+            }
         } else {
             setImagePath("assets/" + car.getColor() + "car" + this.direction + ".png");
         }

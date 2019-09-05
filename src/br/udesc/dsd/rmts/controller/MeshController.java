@@ -3,6 +3,8 @@ package br.udesc.dsd.rmts.controller;
 import br.udesc.dsd.rmts.controller.observer.Observer;
 import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
+import br.udesc.dsd.rmts.model.abstractfactory.AbstractRoadItemFactory;
+import br.udesc.dsd.rmts.model.abstractfactory.RoadItemSemaphoreFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,6 +21,7 @@ public class MeshController implements IMeshController {
     private int columns;
     private int numberOfCars;
     private int timeInterval;
+    private AbstractRoadItemFactory factory;
 
     public static MeshController getInstance() {
         if (instance == null) {
@@ -30,6 +33,7 @@ public class MeshController implements IMeshController {
 
     private MeshController() {
         this.observers = new ArrayList<>();
+        this.factory = new RoadItemSemaphoreFactory();
     }
 
     @Override
@@ -43,7 +47,7 @@ public class MeshController implements IMeshController {
                 matrix = new RoadItem[lines][columns];
                 for (int i = 0; i < lines; i++) {
                     for (int j = 0; j < columns; j++) {
-                        matrix[i][j] = new RoadItem(i, j);
+                        matrix[i][j] = factory.createRoadItem(i, j);
                         int valueOfPositionOnMesh = input.nextInt();
                         switch (valueOfPositionOnMesh) {
                             case 0:
@@ -93,14 +97,6 @@ public class MeshController implements IMeshController {
     public void removeCar(int x, int y) {
         this.matrix[x][y].removeCar();
         notifyRoadMeshUpdate();
-    }
-
-    public void acquireRoadItem(int x, int y) {
-        this.matrix[x][y].acquireRoadItem();
-    }
-
-    public void releaseRoadItem(int x, int y) {
-        this.matrix[x][y].releaseRoadItem();
     }
 
     public void defineRouteAndStartThreaad(int x, int y) {
