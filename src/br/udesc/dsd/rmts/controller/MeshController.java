@@ -78,6 +78,7 @@ public class MeshController implements IMeshController {
     }
 
     public void checkCrossPont(int x, int y, int direction) {
+        matrix[x][y] = factory.createCrossRoad(x, y);
         matrix[x][y].setImagePath("assets/stone.png");
         matrix[x][y].setDirection(direction);
     }

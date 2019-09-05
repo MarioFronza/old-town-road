@@ -11,8 +11,6 @@ public abstract class RoadItem {
     protected int y;
 
     public RoadItem(int x, int y) {
-        this.isEntryPoint = false;
-        this.isExitPoint = false;
         this.car = null;
         this.direction = 0;
         this.x = x;
@@ -90,6 +88,14 @@ public abstract class RoadItem {
         this.imagePath = imagePath;
     }
 
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
     public boolean isEntryPoint() {
         return isEntryPoint;
     }
@@ -104,14 +110,6 @@ public abstract class RoadItem {
 
     public void setExitPoint(boolean exitPoint) {
         isExitPoint = exitPoint;
-    }
-
-    public int getDirection() {
-        return direction;
-    }
-
-    public void setDirection(int direction) {
-        this.direction = direction;
     }
 
     public Car getCar() {

@@ -15,7 +15,7 @@ public class Car extends Thread {
     private RoadItem currentRoad;
     private IMeshController meshController;
     private String color;
-    private int velocidade;
+    private int velocity;
     private int amountOfChoices;
 
     public Car(int type) {
@@ -25,7 +25,8 @@ public class Car extends Thread {
         this.currentRoad = null;
         this.amountOfChoices = 0;
         this.random = new Random();
-        this.velocidade = random.nextInt(300) + 100;
+        this.velocity = random.nextInt(300) + 100;
+        //this.velocity = 50;
         switch (type) {
             case 0:
                 this.color = "red";
@@ -54,7 +55,7 @@ public class Car extends Thread {
                     andou = true;
 
                     try {
-                        sleep(velocidade);
+                        sleep(velocity);
                     } catch (Exception ie) {
                         ie.printStackTrace();
                     }

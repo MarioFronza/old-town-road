@@ -6,4 +6,6 @@ public abstract class AbstractRoadItemFactory {
 
     public abstract RoadItem createRoadItem(int x, int y);
 
+    public abstract RoadItem createCrossRoad(int x, int y);
+
 }
