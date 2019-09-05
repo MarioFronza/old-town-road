@@ -7,20 +7,37 @@ import java.util.*;
 
 public class Car extends Thread {
 
-    private String setImagePath;
     private Queue<RoadItem> route;
     private RoadItem matrix[][];
     private int currentX;
     private int currentY;
+    private Random random;
     private RoadItem currentRoad;
     private IMeshController meshController;
+    private String color;
+    private int velocity;
+    private int amountOfChoices;
 
-    public Car() {
-        this.setImagePath = "";
+    public Car(int type) {
         this.route = new LinkedList<>();
         this.meshController = MeshController.getInstance();
         this.matrix = meshController.getMatrix();
         this.currentRoad = null;
+        this.amountOfChoices = 0;
+        this.random = new Random();
+        this.velocity = random.nextInt(300) + 100;
+        //this.velocity = 50;
+        switch (type) {
+            case 0:
+                this.color = "red";
+                break;
+            case 1:
+                this.color = "blue";
+                break;
+            case 2:
+                this.color = "green";
+                break;
+        }
     }
 
     @Override
@@ -32,16 +49,13 @@ public class Car extends Thread {
                 try {
 
                     RoadItem item = route.remove();
-
-                    this.meshController.acquireRoadItem(item.getX(), item.getY());
                     this.meshController.addCar(this, item.getX(), item.getY());
                     this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
                     this.currentRoad = item;
                     andou = true;
-                    
-                    this.meshController.releaseRoadItem(item.getX(), item.getY());
+
                     try {
-                        sleep(200);
+                        sleep(velocity);
                     } catch (Exception ie) {
                         ie.printStackTrace();
                     }
@@ -100,7 +114,7 @@ public class Car extends Thread {
         }
     }
 
-    public boolean isCrossroad(int x, int y) {
+    private boolean isCrossroad(int x, int y) {
         boolean crossroad = false;
         for (int i = 5; i <= 12; i++)
             if (matrix[x][y].getDirection() == i) {
@@ -111,60 +125,85 @@ public class Car extends Thread {
         return crossroad;
     }
 
-    public void chooseCrossRoad(int direction) {
+    private void chooseCrossRoad(int direction) {
         Random random = new Random();
         int num;
-
         switch (direction) {
             case 5:
                 this.currentX--;
+                this.amountOfChoices++;
                 break;
             case 6:
                 this.currentY++;
+                this.amountOfChoices++;
                 break;
             case 7:
                 this.currentX++;
+                this.amountOfChoices++;
                 break;
             case 8:
                 this.currentY--;
+                this.amountOfChoices++;
                 break;
             case 9:
-                num = random.nextInt(2);
-                if (num == 0)
-                    this.currentX--;
-                else
+                if (amountOfChoices == 2) {
                     this.currentY++;
+                    this.amountOfChoices = 0;
+                } else {
+                    num = random.nextInt(2);
+                    if (num == 0)
+                        this.currentX--;
+                    else
+                        this.currentY++;
+                }
                 break;
             case 10:
-                num = random.nextInt(2);
-                if (num == 0)
+                if (amountOfChoices == 2) {
                     this.currentX--;
-                else
-                    this.currentY--;
+                    this.amountOfChoices = 0;
+                } else {
+                    num = random.nextInt(2);
+                    if (num == 0)
+                        this.currentX--;
+                    else
+                        this.currentY--;
+                }
+
                 break;
             case 11:
-                num = random.nextInt(2);
-                if (num == 0)
-                    this.currentY++;
-                else
+                if (amountOfChoices == 2) {
                     this.currentX++;
+                    this.amountOfChoices = 0;
+                } else {
+                    num = random.nextInt(2);
+                    if (num == 0)
+                        this.currentY++;
+                    else
+                        this.currentX++;
+                }
                 break;
             case 12:
-                num = random.nextInt(2);
-                if (num == 0)
-                    this.currentX++;
-                else
+                if (amountOfChoices == 2) {
                     this.currentY--;
+                    this.amountOfChoices = 0;
+                } else {
+                    num = random.nextInt(2);
+                    if (num == 0)
+                        this.currentX++;
+                    else
+                        this.currentY--;
+                }
                 break;
         }
+
     }
 
-    public String getImagePath() {
-        return setImagePath;
+    public String getColor() {
+        return color;
     }
 
-    public void setImagePath(String setImagePath) {
-        this.setImagePath = setImagePath;
+    public RoadItem getCurrentRoad() {
+        return currentRoad;
     }
 
     public void setCurrentRoad(RoadItem currentRoad) {

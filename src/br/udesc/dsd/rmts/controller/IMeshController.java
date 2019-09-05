@@ -14,10 +14,6 @@ public interface IMeshController extends Observed {
 
     void removeCar(int x, int y);
 
-    void acquireRoadItem(int x, int y);
-
-    void releaseRoadItem(int x, int y);
-
     void defineRouteAndStartThreaad(int x, int y);
 
     void checkEntryPointOnTop(int x, int y, int direction);
@@ -35,7 +31,7 @@ public interface IMeshController extends Observed {
     int getLines();
 
     int getColumns();
-    
+
     void runSimulation();
 
     void setPathName(File file);
@@ -43,11 +39,11 @@ public interface IMeshController extends Observed {
     void setNumberOfCars(int numberOfCars);
 
     void setTimeInterval(int timeInterval);
-    
+
     int getTimeInterval();
-    
+
     int getNumberOfCars();
-    
+
     RoadItem[][] getMatrix();
 
 }

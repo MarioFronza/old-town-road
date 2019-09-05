@@ -2,6 +2,7 @@ package br.udesc.dsd.rmts.controller;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
@@ -41,8 +42,11 @@ public class Simulation extends Thread {
     }
 
     public void loadCarsInQueue() {
+        Random random = new Random();
+        int num;
         for (int i = 0; i < this.meshController.getNumberOfCars(); i++) {
-            cars.add(new Car());
+            num = random.nextInt(3);
+            cars.add(new Car(num));
         }
     }
 

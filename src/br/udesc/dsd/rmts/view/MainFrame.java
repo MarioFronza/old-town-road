@@ -128,7 +128,7 @@ public class MainFrame extends JFrame implements Observer {
     }
 
     @Override
-    public void roadMeshUpdate() {
+    public synchronized void roadMeshUpdate() {
     	this.roadMeshPanel.updateUI();
     }
 
