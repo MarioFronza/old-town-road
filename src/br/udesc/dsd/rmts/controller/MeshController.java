@@ -19,15 +19,15 @@ public class MeshController implements IMeshController {
     private List<Observer> observers;
     private RoadItem matrix[][];
     private File file = null;
+    private Simulation simulation;
+    private List<Car> threadList;
+    private AbstractRoadItemFactory factory;
+    private ExecutorService executorService;
     private int lines;
     private int columns;
     private int numberOfCars;
     private int timeInterval;
     private boolean terminate;
-    private Simulation simulation;
-    private List<Car> threadList;
-    private AbstractRoadItemFactory factory;
-    private ExecutorService executorService;
 
     public static MeshController getInstance() {
         if (instance == null) {
@@ -40,7 +40,6 @@ public class MeshController implements IMeshController {
     private MeshController() {
         this.observers = new ArrayList<>();
         this.threadList = new ArrayList<>();
-        this.factory = new RoadItemSemaphoreFactory();
         this.terminate = false;
     }
 
@@ -55,7 +54,7 @@ public class MeshController implements IMeshController {
                 matrix = new RoadItem[lines][columns];
                 for (int i = 0; i < lines; i++) {
                     for (int j = 0; j < columns; j++) {
-                        matrix[i][j] = factory.createRoadItem(i, j);
+                        matrix[i][j] = factory.createRoad(i, j);
                         int valueOfPositionOnMesh = input.nextInt();
                         switch (valueOfPositionOnMesh) {
                             case 0:
@@ -85,12 +84,6 @@ public class MeshController implements IMeshController {
         }
     }
 
-    public void checkCrossPont(int x, int y, int direction) {
-        this.matrix[x][y] = factory.createCrossRoad(x, y);
-        this.matrix[x][y].setImagePath("assets/stone.png");
-        this.matrix[x][y].setDirection(direction);
-    }
-
     @Override
     public void runSimulation() {
         this.terminate = false;
@@ -106,29 +99,39 @@ public class MeshController implements IMeshController {
         this.simulation.terminate();
     }
 
+    @Override
     public void addCar(Car car, int x, int y) {
         this.matrix[x][y].addCar(car);
         this.threadList.add(matrix[x][y].getCar());
         notifyRoadMeshUpdate();
     }
 
+    @Override
     public void removeCar(int x, int y) {
         this.matrix[x][y].removeCar();
         notifyRoadMeshUpdate();
     }
 
     @Override
-    public void removeThread(Car car) {
-        this.simulation.addCar();
-        this.threadList.remove(car);
+    public void checkCrossPont(int x, int y, int direction) {
+        this.matrix[x][y] = factory.createCrossRoad(x, y);
+        this.matrix[x][y].setImagePath("assets/stone.png");
+        this.matrix[x][y].setDirection(direction);
     }
 
+    @Override
     public void defineRouteAndStartThread(int x, int y) {
         if (!terminate) {
             this.matrix[x][y].getCar().defineRoute(x, y);
             this.matrix[x][y].getCar().setCurrentRoad(matrix[x][y]);
             this.executorService.execute(matrix[x][y].getCar());
         }
+    }
+
+    @Override
+    public void removeThread(Car car) {
+        this.simulation.addCar();
+        this.threadList.remove(car);
     }
 
     @Override
@@ -181,10 +184,6 @@ public class MeshController implements IMeshController {
         return file;
     }
 
-    public boolean isTerminate() {
-        return terminate;
-    }
-
     @Override
     public int getLines() {
         return lines;
@@ -196,17 +195,33 @@ public class MeshController implements IMeshController {
     }
 
     @Override
-    public void setPathName(File file) {
-        this.file = file;
-    }
-
-    @Override
     public int getTimeInterval() {
         return this.timeInterval;
     }
 
+    @Override
     public ExecutorService getExecutorService() {
         return executorService;
+    }
+
+    @Override
+    public int getNumberOfCars() {
+        return this.numberOfCars;
+    }
+
+    @Override
+    public RoadItem[][] getMatrix() {
+        return this.matrix;
+    }
+
+    @Override
+    public boolean isTerminate() {
+        return terminate;
+    }
+
+    @Override
+    public void setPathName(File file) {
+        this.file = file;
     }
 
     @Override
@@ -220,13 +235,13 @@ public class MeshController implements IMeshController {
     }
 
     @Override
-    public void addObserver(Observer observer) {
-        this.observers.add(observer);
+    public void setFactory(AbstractRoadItemFactory factory) {
+        this.factory = factory;
     }
 
     @Override
-    public void removeObserver(Observer observer) {
-        this.observers.remove(observer);
+    public void addObserver(Observer observer) {
+        this.observers.add(observer);
     }
 
     @Override
@@ -241,16 +256,6 @@ public class MeshController implements IMeshController {
         for (Observer observer : observers) {
             observer.roadMeshUpdate();
         }
-    }
-
-    @Override
-    public int getNumberOfCars() {
-        return this.numberOfCars;
-    }
-
-    @Override
-    public RoadItem[][] getMatrix() {
-        return this.matrix;
     }
 
 }
