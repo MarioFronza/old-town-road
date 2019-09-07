@@ -5,6 +5,7 @@ import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
 
 public interface IMeshController extends Observed {
 
@@ -14,7 +15,9 @@ public interface IMeshController extends Observed {
 
     void removeCar(int x, int y);
 
-    void defineRouteAndStartThreaad(int x, int y);
+    void removeThread(Car car);
+
+    void defineRouteAndStartThread(int x, int y);
 
     void checkEntryPointOnTop(int x, int y, int direction);
 
@@ -26,6 +29,10 @@ public interface IMeshController extends Observed {
 
     String getMatrixPosition(int rowIndex, int columnIndex);
 
+    ExecutorService getExecutorService();
+
+    boolean isTerminate();
+
     File getFile();
 
     int getLines();
@@ -33,6 +40,8 @@ public interface IMeshController extends Observed {
     int getColumns();
 
     void runSimulation();
+
+    void stopSimulation();
 
     void setPathName(File file);
 

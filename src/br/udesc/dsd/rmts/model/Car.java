@@ -5,7 +5,7 @@ import br.udesc.dsd.rmts.controller.MeshController;
 
 import java.util.*;
 
-public class Car extends Thread {
+public class Car implements Runnable {
 
     private Queue<RoadItem> route;
     private RoadItem matrix[][];
@@ -26,7 +26,6 @@ public class Car extends Thread {
         this.amountOfChoices = 0;
         this.random = new Random();
         this.velocity = random.nextInt(300) + 100;
-        //this.velocity = 50;
         switch (type) {
             case 0:
                 this.color = "red";
@@ -49,20 +48,21 @@ public class Car extends Thread {
                 try {
 
                     RoadItem item = route.remove();
+
                     this.meshController.addCar(this, item.getX(), item.getY());
                     this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
                     this.currentRoad = item;
                     andou = true;
 
                     try {
-                        sleep(velocity);
+                        Thread.sleep(velocity);
                     } catch (Exception ie) {
                         ie.printStackTrace();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     try {
-                        sleep(100);
+                        Thread.sleep(100);
                     } catch (Exception ie) {
                         ie.printStackTrace();
                     }
@@ -70,6 +70,7 @@ public class Car extends Thread {
 
             } while (!andou);
         }
+        this.meshController.removeThread(currentRoad.getCar());
         this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
     }
 
@@ -146,7 +147,8 @@ public class Car extends Thread {
                 this.amountOfChoices++;
                 break;
             case 9:
-                if (amountOfChoices == 2) {
+                if (amountOfChoices == 3) {
+                    System.out.println("marios");
                     this.currentY++;
                     this.amountOfChoices = 0;
                 } else {
@@ -158,7 +160,8 @@ public class Car extends Thread {
                 }
                 break;
             case 10:
-                if (amountOfChoices == 2) {
+                if (amountOfChoices == 3) {
+                    System.out.println("marios");
                     this.currentX--;
                     this.amountOfChoices = 0;
                 } else {
@@ -171,7 +174,8 @@ public class Car extends Thread {
 
                 break;
             case 11:
-                if (amountOfChoices == 2) {
+                if (amountOfChoices == 3) {
+                    System.out.println("marios");
                     this.currentX++;
                     this.amountOfChoices = 0;
                 } else {
@@ -183,7 +187,8 @@ public class Car extends Thread {
                 }
                 break;
             case 12:
-                if (amountOfChoices == 2) {
+                if (amountOfChoices == 3) {
+                    System.out.println("marios");
                     this.currentY--;
                     this.amountOfChoices = 0;
                 } else {
