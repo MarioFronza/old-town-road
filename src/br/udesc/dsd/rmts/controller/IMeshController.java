@@ -3,6 +3,7 @@ package br.udesc.dsd.rmts.controller;
 import br.udesc.dsd.rmts.controller.observer.Observed;
 import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
+import br.udesc.dsd.rmts.model.abstractfactory.AbstractRoadItemFactory;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -11,6 +12,10 @@ public interface IMeshController extends Observed {
 
     void readAndCreateMatrix();
 
+    void runSimulation();
+
+    void stopSimulation();
+
     void addCar(Car car, int x, int y);
 
     void removeCar(int x, int y);
@@ -18,6 +23,8 @@ public interface IMeshController extends Observed {
     void removeThread(Car car);
 
     void defineRouteAndStartThread(int x, int y);
+
+    void checkCrossPont(int x, int y, int direction);
 
     void checkEntryPointOnTop(int x, int y, int direction);
 
@@ -31,28 +38,27 @@ public interface IMeshController extends Observed {
 
     ExecutorService getExecutorService();
 
-    boolean isTerminate();
-
     File getFile();
 
     int getLines();
 
     int getColumns();
 
-    void runSimulation();
-
-    void stopSimulation();
-
-    void setPathName(File file);
-
-    void setNumberOfCars(int numberOfCars);
-
-    void setTimeInterval(int timeInterval);
-
     int getTimeInterval();
 
     int getNumberOfCars();
 
     RoadItem[][] getMatrix();
+
+    boolean isTerminate();
+
+    void setPathName(File file);
+
+    void setFactory(AbstractRoadItemFactory factory);
+
+    void setNumberOfCars(int numberOfCars);
+
+    void setTimeInterval(int timeInterval);
+
 
 }

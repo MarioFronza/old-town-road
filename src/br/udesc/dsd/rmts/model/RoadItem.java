@@ -115,4 +115,5 @@ public abstract class RoadItem {
     public Car getCar() {
         return car;
     }
+
 }

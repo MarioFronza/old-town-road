@@ -85,28 +85,28 @@ public class Car implements Runnable {
                     if (!isCrossroad(currentX, currentY))
                         this.currentX--;
                     else
-                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
+                        chooseCrossroad(matrix[currentX][currentY].getDirection());
                     break;
                 case 2:
                     if (!isCrossroad(currentX, currentY))
                         this.currentY++;
                     else
-                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
+                        chooseCrossroad(matrix[currentX][currentY].getDirection());
                     break;
                 case 3:
                     if (!isCrossroad(currentX, currentY))
                         this.currentX++;
                     else
-                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
+                        chooseCrossroad(matrix[currentX][currentY].getDirection());
                     break;
                 case 4:
                     if (!isCrossroad(currentX, currentY))
                         this.currentY--;
                     else
-                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
+                        chooseCrossroad(matrix[currentX][currentY].getDirection());
                     break;
                 default:
-                    chooseCrossRoad(matrix[currentX][currentY].getDirection());
+                    chooseCrossroad(matrix[currentX][currentY].getDirection());
                     break;
             }
             route.add(matrix[currentX][currentY]);
@@ -126,7 +126,7 @@ public class Car implements Runnable {
         return crossroad;
     }
 
-    private void chooseCrossRoad(int direction) {
+    private void chooseCrossroad(int direction) {
         Random random = new Random();
         int num;
         switch (direction) {
@@ -217,4 +217,3 @@ public class Car implements Runnable {
 
 
 }
-

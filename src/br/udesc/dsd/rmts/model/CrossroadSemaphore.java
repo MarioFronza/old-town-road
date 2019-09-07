@@ -2,13 +2,13 @@ package br.udesc.dsd.rmts.model;
 
 import java.util.concurrent.Semaphore;
 
-public class CrossRoadSemaphore extends RoadItem {
+public class CrossroadSemaphore extends RoadItem {
 
     private Semaphore mutex;
     private Semaphore full;
     private Semaphore free;
 
-    public CrossRoadSemaphore(int x, int y) {
+    public CrossroadSemaphore(int x, int y) {
         super(x, y);
         full = new Semaphore(0);
         free = new Semaphore(1);

@@ -12,7 +12,7 @@ public class Simulation extends Thread {
 
     private Queue<Car> cars;
     private IMeshController meshController;
-    RoadItem[][] matrix;
+    private RoadItem[][] matrix;
     private volatile boolean running = true;
 
     public Simulation() {

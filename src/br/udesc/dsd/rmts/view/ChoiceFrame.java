@@ -2,6 +2,8 @@ package br.udesc.dsd.rmts.view;
 
 import br.udesc.dsd.rmts.controller.IMeshController;
 import br.udesc.dsd.rmts.controller.MeshController;
+import br.udesc.dsd.rmts.model.abstractfactory.RoadItemMonitorFactory;
+import br.udesc.dsd.rmts.model.abstractfactory.RoadItemSemaphoreFactory;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -99,6 +101,11 @@ public class ChoiceFrame extends JFrame {
                 super.setVisible(false);
                 this.meshController.setNumberOfCars(Integer.parseInt(numberOfCars.getText()));
                 this.meshController.setTimeInterval(Integer.parseInt(timeInterval.getText()));
+                if (mechanismSemaphore.isSelected()) {
+                    this.meshController.setFactory(new RoadItemSemaphoreFactory());
+                } else if (mechanismMonitor.isSelected()) {
+                    this.meshController.setFactory(new RoadItemMonitorFactory());
+                }
                 MainFrame mainFrame = new MainFrame();
                 mainFrame.setVisible(true);
             }
