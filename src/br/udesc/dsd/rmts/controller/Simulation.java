@@ -13,10 +13,11 @@ public class Simulation extends Thread {
     private Queue<Car> cars;
     private IMeshController meshController;
     private RoadItem[][] matrix;
-    private volatile boolean running = true;
+    private volatile boolean running;
 
-    public Simulation() {
-        this.meshController = MeshController.getInstance();
+
+    public Simulation(IMeshController meshController) {
+        this.meshController = meshController;
         this.cars = new LinkedList<>();
     }
 
@@ -24,7 +25,7 @@ public class Simulation extends Thread {
     public void run() {
         if (running) {
             this.loadCarsInQueue();
-            matrix = this.meshController.getMatrix();
+            this.matrix = this.meshController.getMatrix();
         }
 
         while (running) {
@@ -34,7 +35,7 @@ public class Simulation extends Thread {
                     if (matrix[i][j].isEntryPoint() && !cars.isEmpty()) {
                         try {
                             sleep(this.meshController.getTimeInterval() * 1000);
-                            if (this.meshController.isTerminate()) {
+                            if (!running) {
                                 verifyTerminated();
                                 break outerloop;
                             } else {
@@ -50,14 +51,16 @@ public class Simulation extends Thread {
                 }
             }
         }
+        System.out.println(this.getId());
     }
 
     public void terminate() {
         running = false;
     }
 
-    public void setRunning(){
+    public void setRunning() {
         this.running = true;
+
     }
 
     public void verifyTerminated() {
@@ -66,8 +69,9 @@ public class Simulation extends Thread {
         while (!finished) {
             try {
                 finished = this.meshController.getExecutorService().awaitTermination(10, TimeUnit.SECONDS);
-                if(finished){
+                if (finished) {
                     this.meshController.notifyMessage("Simulação finalizada!");
+                    this.meshController.setTerminate();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
