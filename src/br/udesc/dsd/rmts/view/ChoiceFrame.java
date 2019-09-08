@@ -17,6 +17,12 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Choice frame, where the user can select file and set other informations
+ *
+ * @author João Pedro Schmitz, Mário Fronza
+ * @version 1.0.0
+ */
 public class ChoiceFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
@@ -72,7 +78,7 @@ public class ChoiceFrame extends JFrame {
         this.numberOfCars.setMaximumSize(new Dimension(350, 20));
         this.numberOfCars.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        this.labelTimeInterval = new JLabel("Vehicle insertion range (in milliseconds):");
+        this.labelTimeInterval = new JLabel("Vehicle insertion range (in seconds):");
         this.labelTimeInterval.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         this.timeInterval = new JTextField();

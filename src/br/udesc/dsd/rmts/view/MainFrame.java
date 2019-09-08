@@ -11,6 +11,12 @@ import br.udesc.dsd.rmts.controller.IMeshController;
 import br.udesc.dsd.rmts.controller.MeshController;
 import br.udesc.dsd.rmts.controller.observer.*;
 
+/**
+ * MainFrame class, where the simulation appears
+ *
+ * @author João Pedro Schmitz, Mário Fronza
+ * @version 1.0.0
+ */
 public class MainFrame extends JFrame implements Observer {
 
     private static final long serialVersionUID = 1L;
@@ -74,11 +80,11 @@ public class MainFrame extends JFrame implements Observer {
             this.meshController.runSimulation();
             this.buttonStartSimulation.setEnabled(false);
             this.buttonStopSimulation.setEnabled(true);
+            this.buttonOtherSimulation.setEnabled(false);
         });
 
         this.buttonOtherSimulation = new JButton();
         this.buttonOtherSimulation.setText("Other simulation");
-        this.buttonOtherSimulation.setForeground(new Color(99, 110, 114));
         this.buttonOtherSimulation.setPreferredSize(sizeButton);
         this.buttonOtherSimulation.addActionListener((ActionEvent e) -> {
             if (!this.meshController.isTerminate()) {
@@ -92,58 +98,20 @@ public class MainFrame extends JFrame implements Observer {
 
         this.buttonStopSimulation = new JButton();
         this.buttonStopSimulation.setText("Stop simulation");
-        this.buttonStopSimulation.setForeground(new Color(250, 177, 160));
         this.buttonStopSimulation.setPreferredSize(sizeButton);
         this.buttonStopSimulation.setEnabled(false);
         this.buttonStopSimulation.addActionListener((ActionEvent e) -> {
             this.meshController.stopSimulation();
             this.buttonStopSimulation.setEnabled(false);
+            this.buttonOtherSimulation.setEnabled(true);
             this.buttonStartSimulation.setEnabled(false);
         });
-
     }
 
     private void addComponents() {
         GridBagConstraints cons;
 
         cons = new GridBagConstraints();
-<<<<<<< HEAD
-    	cons.gridy = 0;
-    	cons.gridx = 0;
-    	cons.anchor = GridBagConstraints.FIRST_LINE_START;
-        this.buttons.add(this.buttonStartSimulation, cons);
-
-    	cons = new GridBagConstraints();
-    	cons.gridy = 1;
-    	cons.gridx = 0;
-    	cons.anchor = GridBagConstraints.FIRST_LINE_START;
-    	this.buttons.add(this.buttonStopSimulation, cons);
-    	
-        cons = new GridBagConstraints();
-    	cons.gridy = 2;
-    	cons.gridx = 0;
-    	cons.anchor = GridBagConstraints.FIRST_LINE_START;
-    	this.buttons.add(this.buttonOtherSimulation, cons);
-    	
-        cons = new GridBagConstraints();
-    	cons.gridy = 3;
-    	cons.gridx = 0;
-    	cons.anchor = GridBagConstraints.FIRST_LINE_START;
-    	this.buttons.add(this.allInformation, cons);
-        
-    	cons = new GridBagConstraints();
-    	cons.gridy = 0;
-    	cons.gridx = 0;
-    	cons.anchor = GridBagConstraints.NORTH;
-        this.main.add(this.buttons, cons);
-        
-        cons = new GridBagConstraints();
-    	cons.gridy = 0;
-    	cons.gridx = 1;
-        this.main.add(this.roadMeshPanel, cons);
-    	
-        this.buttons.setBackground(Color.WHITE);
-=======
         cons.gridy = 0;
         cons.gridx = 0;
         cons.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -160,20 +128,24 @@ public class MainFrame extends JFrame implements Observer {
         cons.gridx = 0;
         cons.anchor = GridBagConstraints.FIRST_LINE_START;
         this.info.add(this.buttonOtherSimulation, cons);
+        
+        cons = new GridBagConstraints();
+        cons.gridy = 3;
+        cons.gridx = 0;
+        cons.anchor = GridBagConstraints.FIRST_LINE_START;
+        this.info.add(this.allInformation, cons);
 
         cons = new GridBagConstraints();
         cons.gridy = 0;
         cons.gridx = 0;
         cons.anchor = GridBagConstraints.NORTH;
         this.main.add(this.info, cons);
-
+   
         cons = new GridBagConstraints();
         cons.gridy = 0;
         cons.gridx = 1;
-
         this.main.add(this.roadMeshPanel, cons);
-
->>>>>>> b9f302084f6db9cf7e4f409ab0ddfb512146d69e
+        
         this.info.setBackground(Color.WHITE);
         this.main.setBackground(Color.WHITE);
         super.add(this.main);

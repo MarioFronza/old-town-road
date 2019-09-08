@@ -5,6 +5,12 @@ import br.udesc.dsd.rmts.controller.MeshController;
 
 import java.util.*;
 
+/**
+ * Car thread class
+ *
+ * @author João Pedro Schmitz, Mário Fronza
+ * @version 1.0.0
+ */
 public class Car implements Runnable {
 
     private Queue<RoadItem> route;
@@ -38,25 +44,24 @@ public class Car implements Runnable {
                 break;
         }
     }
-    
-    public void setPositions(int x, int y, List<RoadItem> positions) {
-        this.matrix[x][y].setPositions(positions);
-    }
 
     @Override
     public void run() {
+
         while (!route.isEmpty()) {
             boolean andou = false;
             do {
                 try {
-                	ArrayList<RoadItem> nextPositions = null;
-                	RoadItem item = route.remove();
-                    
-                	while(route.remove().getDirection() > 4) {
-                    	nextPositions.add(item);
-                    }
-                	
-                	this.meshController.addCar(this, item.getX(), item.getY(), nextPositions);
+                    RoadItem item = route.remove();
+
+                    this.meshController.addCar(this, item.getX(), item.getY());
+                    this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
+                    this.currentRoad = item;
+                    andou = true;
+
+                    try {
+                        Thread.sleep(velocity);
+                    } catch (Exception ie) {
                         ie.printStackTrace();
                     }
                 } catch (Exception e) {

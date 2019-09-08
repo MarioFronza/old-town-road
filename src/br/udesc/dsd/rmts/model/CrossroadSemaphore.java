@@ -3,6 +3,12 @@ package br.udesc.dsd.rmts.model;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
+/**
+ * Crossroad implementation with semaphore 
+ *
+ * @author João Pedro Schmitz, Mário Fronza
+ * @version 1.0.0
+ */
 public class CrossroadSemaphore extends RoadItem {
 
     private Semaphore mutex;
