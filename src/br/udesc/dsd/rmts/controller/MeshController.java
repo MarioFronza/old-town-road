@@ -4,7 +4,6 @@ import br.udesc.dsd.rmts.controller.observer.Observer;
 import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
 import br.udesc.dsd.rmts.model.abstractfactory.AbstractRoadItemFactory;
-import br.udesc.dsd.rmts.model.abstractfactory.RoadItemSemaphoreFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +11,12 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+/**
+ * Mesh controller, contains the simulation logic
+ *
+ * @author João Pedro Schmitz, Mário Fronza
+ * @version 1.0.0
+ */
 public class MeshController implements IMeshController {
 
     private static MeshController instance;
@@ -86,7 +90,7 @@ public class MeshController implements IMeshController {
 
     @Override
     public void runSimulation() {
-        this.terminate = false;
+    	this.terminate = false;
         this.simulation = new Simulation(this);
         this.executorService = Executors.newCachedThreadPool();
         this.simulation.setRunning();
@@ -95,7 +99,6 @@ public class MeshController implements IMeshController {
 
     @Override
     public void stopSimulation() {
-
         this.simulation.terminate();
     }
 
@@ -205,16 +208,6 @@ public class MeshController implements IMeshController {
     }
 
     @Override
-    public int getNumberOfCars() {
-        return this.numberOfCars;
-    }
-
-    @Override
-    public RoadItem[][] getMatrix() {
-        return this.matrix;
-    }
-
-    @Override
     public boolean isTerminate() {
         return terminate;
     }
@@ -263,4 +256,29 @@ public class MeshController implements IMeshController {
         }
     }
 
+    @Override
+    public int getNumberOfCars() {
+        return this.numberOfCars;
+    }
+
+    @Override
+    public RoadItem[][] getMatrix() {
+        return this.matrix;
+    }
+
+	@Override
+	public String getGeneralInformation() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("<html><body>Time interval: " + this.getTimeInterval() + "s<br />");
+		builder.append("Number of cars: " + this.getNumberOfCars() + "<br>"); 
+		builder.append("Filename: " + this.file.getName() + "<br></body></html>");
+		
+		return builder.toString();
+	}
+
+	@Override
+	public void setPositions(int x, int y, List<RoadItem> positions) {
+		// TODO Auto-generated method stub
+		
+	}
 }

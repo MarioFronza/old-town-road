@@ -7,6 +7,12 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 
+/**
+ * Roadmesh Panel
+ *
+ * @author João Pedro Schmitz, Mário Fronza
+ * @version 1.0.0
+ */
 public class RoadMeshPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

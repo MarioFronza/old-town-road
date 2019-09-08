@@ -1,6 +1,12 @@
 package br.udesc.dsd.rmts.model;
 
 
+/**
+ * Road implementation with monitor
+ *
+ * @author João Pedro Schmitz, Mário Fronza
+ * @version 1.0.0
+ */
 public class RoadMonitor extends RoadItem {
 
 

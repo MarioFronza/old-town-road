@@ -5,6 +5,12 @@ import br.udesc.dsd.rmts.controller.MeshController;
 
 import java.util.*;
 
+/**
+ * Car thread class
+ *
+ * @author João Pedro Schmitz, Mário Fronza
+ * @version 1.0.0
+ */
 public class Car implements Runnable {
 
     private Queue<RoadItem> route;
@@ -46,7 +52,6 @@ public class Car implements Runnable {
             boolean andou = false;
             do {
                 try {
-
                     RoadItem item = route.remove();
 
                     this.meshController.addCar(this, item.getX(), item.getY());

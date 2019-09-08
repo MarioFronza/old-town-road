@@ -8,6 +8,12 @@ import java.util.concurrent.TimeUnit;
 import br.udesc.dsd.rmts.model.Car;
 import br.udesc.dsd.rmts.model.RoadItem;
 
+/**
+ * Simulation thread
+ *
+ * @author João Pedro Schmitz, Mário Fronza
+ * @version 1.0.0
+ */
 public class Simulation extends Thread {
 
     private Queue<Car> cars;
@@ -51,7 +57,6 @@ public class Simulation extends Thread {
                 }
             }
         }
-        System.out.println(this.getId());
     }
 
     public void terminate() {

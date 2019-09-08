@@ -6,8 +6,15 @@ import br.udesc.dsd.rmts.model.RoadItem;
 import br.udesc.dsd.rmts.model.abstractfactory.AbstractRoadItemFactory;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+/**
+ * Controller interface
+ *
+ * @author João Pedro Schmitz, Mário Fronza
+ * @version 1.0.0
+ */
 public interface IMeshController extends Observed {
 
     void readAndCreateMatrix();
@@ -44,10 +51,6 @@ public interface IMeshController extends Observed {
 
     int getColumns();
 
-    int getTimeInterval();
-
-    int getNumberOfCars();
-
     RoadItem[][] getMatrix();
 
     boolean isTerminate();
@@ -57,6 +60,14 @@ public interface IMeshController extends Observed {
     void setTerminate();
 
     void setFactory(AbstractRoadItemFactory factory);
+
+    int getTimeInterval();
+    
+    String getGeneralInformation();
+    
+    int getNumberOfCars();
+    
+    void setPositions(int x, int y, List<RoadItem> positions);
 
     void setNumberOfCars(int numberOfCars);
 
