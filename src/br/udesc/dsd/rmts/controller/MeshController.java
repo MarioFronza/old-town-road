@@ -87,7 +87,7 @@ public class MeshController implements IMeshController {
     @Override
     public void runSimulation() {
         this.terminate = false;
-        this.simulation = new Simulation();
+        this.simulation = new Simulation(this);
         this.executorService = Executors.newCachedThreadPool();
         this.simulation.setRunning();
         this.simulation.start();
@@ -95,7 +95,7 @@ public class MeshController implements IMeshController {
 
     @Override
     public void stopSimulation() {
-        this.terminate = true;
+
         this.simulation.terminate();
     }
 
@@ -222,6 +222,11 @@ public class MeshController implements IMeshController {
     @Override
     public void setPathName(File file) {
         this.file = file;
+    }
+
+    @Override
+    public void setTerminate() {
+        this.terminate = true;
     }
 
     @Override

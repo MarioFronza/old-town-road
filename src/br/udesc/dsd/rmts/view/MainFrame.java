@@ -62,6 +62,8 @@ public class MainFrame extends JFrame implements Observer {
         this.buttonStartSimulation.setForeground(new Color(85, 239, 196));
         this.buttonStartSimulation.addActionListener((ActionEvent e) -> {
             this.meshController.runSimulation();
+            this.buttonStartSimulation.setEnabled(false);
+            this.buttonStopSimulation.setEnabled(true);
         });
 
         this.buttonOtherSimulation = new JButton();
@@ -71,9 +73,9 @@ public class MainFrame extends JFrame implements Observer {
             if (!this.meshController.isTerminate()) {
                 JOptionPane.showMessageDialog(this, "Aguarde o fim da simulação!");
             } else {
+                super.dispose();
                 ChoiceFrame choice = new ChoiceFrame();
                 choice.setVisible(true);
-                super.dispose();
             }
         });
 
@@ -81,8 +83,11 @@ public class MainFrame extends JFrame implements Observer {
         this.buttonStopSimulation.setText("Stop simulation");
         this.buttonStopSimulation.setForeground(new Color(250, 177, 160));
         this.buttonStopSimulation.setPreferredSize(sizeButton);
+        this.buttonStopSimulation.setEnabled(false);
         this.buttonStopSimulation.addActionListener((ActionEvent e) -> {
             this.meshController.stopSimulation();
+            this.buttonStopSimulation.setEnabled(false);
+            this.buttonStartSimulation.setEnabled(false);
         });
 
     }
@@ -133,6 +138,7 @@ public class MainFrame extends JFrame implements Observer {
     @Override
     public void message(String message) {
         JOptionPane.showMessageDialog(this, message);
+        this.buttonStartSimulation.setEnabled(true);
     }
 
     @Override

@@ -82,28 +82,16 @@ public class Car implements Runnable {
         while (!isExitPoint) {
             switch (matrix[currentX][currentY].getDirection()) {
                 case 1:
-                    if (!isCrossroad(currentX, currentY))
-                        this.currentX--;
-                    else
-                        chooseCrossroad(matrix[currentX][currentY].getDirection());
+                    this.currentX--;
                     break;
                 case 2:
-                    if (!isCrossroad(currentX, currentY))
-                        this.currentY++;
-                    else
-                        chooseCrossroad(matrix[currentX][currentY].getDirection());
+                    this.currentY++;
                     break;
                 case 3:
-                    if (!isCrossroad(currentX, currentY))
-                        this.currentX++;
-                    else
-                        chooseCrossroad(matrix[currentX][currentY].getDirection());
+                    this.currentX++;
                     break;
                 case 4:
-                    if (!isCrossroad(currentX, currentY))
-                        this.currentY--;
-                    else
-                        chooseCrossroad(matrix[currentX][currentY].getDirection());
+                    this.currentY--;
                     break;
                 default:
                     chooseCrossroad(matrix[currentX][currentY].getDirection());
@@ -113,17 +101,6 @@ public class Car implements Runnable {
             if (matrix[currentX][currentY].isExitPoint())
                 isExitPoint = true;
         }
-    }
-
-    private boolean isCrossroad(int x, int y) {
-        boolean crossroad = false;
-        for (int i = 5; i <= 12; i++)
-            if (matrix[x][y].getDirection() == i) {
-                crossroad = true;
-            }
-
-
-        return crossroad;
     }
 
     private void chooseCrossroad(int direction) {
@@ -148,7 +125,6 @@ public class Car implements Runnable {
                 break;
             case 9:
                 if (amountOfChoices == 3) {
-                    System.out.println("marios");
                     this.currentY++;
                     this.amountOfChoices = 0;
                 } else {
@@ -157,11 +133,12 @@ public class Car implements Runnable {
                         this.currentX--;
                     else
                         this.currentY++;
+
+                    this.amountOfChoices++;
                 }
                 break;
             case 10:
                 if (amountOfChoices == 3) {
-                    System.out.println("marios");
                     this.currentX--;
                     this.amountOfChoices = 0;
                 } else {
@@ -170,12 +147,12 @@ public class Car implements Runnable {
                         this.currentX--;
                     else
                         this.currentY--;
-                }
 
+                    this.amountOfChoices++;
+                }
                 break;
             case 11:
                 if (amountOfChoices == 3) {
-                    System.out.println("marios");
                     this.currentX++;
                     this.amountOfChoices = 0;
                 } else {
@@ -184,11 +161,12 @@ public class Car implements Runnable {
                         this.currentY++;
                     else
                         this.currentX++;
+
+                    this.amountOfChoices++;
                 }
                 break;
             case 12:
                 if (amountOfChoices == 3) {
-                    System.out.println("marios");
                     this.currentY--;
                     this.amountOfChoices = 0;
                 } else {
@@ -197,6 +175,8 @@ public class Car implements Runnable {
                         this.currentX++;
                     else
                         this.currentY--;
+
+                    this.amountOfChoices++;
                 }
                 break;
         }

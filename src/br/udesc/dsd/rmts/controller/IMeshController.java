@@ -54,6 +54,8 @@ public interface IMeshController extends Observed {
 
     void setPathName(File file);
 
+    void setTerminate();
+
     void setFactory(AbstractRoadItemFactory factory);
 
     void setNumberOfCars(int numberOfCars);
