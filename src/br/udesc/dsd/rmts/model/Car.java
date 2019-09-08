@@ -5,7 +5,7 @@ import br.udesc.dsd.rmts.controller.MeshController;
 
 import java.util.*;
 
-public class Car extends Thread {
+public class Car implements Runnable {
 
     private Queue<RoadItem> route;
     private RoadItem matrix[][];
@@ -57,19 +57,12 @@ public class Car extends Thread {
                     }
                 	
                 	this.meshController.addCar(this, item.getX(), item.getY(), nextPositions);
-                    this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
-                    this.currentRoad = item;
-                    andou = true;
-
-                    try {
-                        sleep(velocity);
-                    } catch (Exception ie) {
                         ie.printStackTrace();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     try {
-                        sleep(100);
+                        Thread.sleep(100);
                     } catch (Exception ie) {
                         ie.printStackTrace();
                     }
@@ -77,6 +70,7 @@ public class Car extends Thread {
 
             } while (!andou);
         }
+        this.meshController.removeThread(currentRoad.getCar());
         this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
     }
 
@@ -88,31 +82,19 @@ public class Car extends Thread {
         while (!isExitPoint) {
             switch (matrix[currentX][currentY].getDirection()) {
                 case 1:
-                    if (!isCrossroad(currentX, currentY))
-                        this.currentX--;
-                    else
-                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
+                    this.currentX--;
                     break;
                 case 2:
-                    if (!isCrossroad(currentX, currentY))
-                        this.currentY++;
-                    else
-                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
+                    this.currentY++;
                     break;
                 case 3:
-                    if (!isCrossroad(currentX, currentY))
-                        this.currentX++;
-                    else
-                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
+                    this.currentX++;
                     break;
                 case 4:
-                    if (!isCrossroad(currentX, currentY))
-                        this.currentY--;
-                    else
-                        chooseCrossRoad(matrix[currentX][currentY].getDirection());
+                    this.currentY--;
                     break;
                 default:
-                    chooseCrossRoad(matrix[currentX][currentY].getDirection());
+                    chooseCrossroad(matrix[currentX][currentY].getDirection());
                     break;
             }
             route.add(matrix[currentX][currentY]);
@@ -121,18 +103,7 @@ public class Car extends Thread {
         }
     }
 
-    private boolean isCrossroad(int x, int y) {
-        boolean crossroad = false;
-        for (int i = 5; i <= 12; i++)
-            if (matrix[x][y].getDirection() == i) {
-                crossroad = true;
-            }
-
-
-        return crossroad;
-    }
-
-    private void chooseCrossRoad(int direction) {
+    private void chooseCrossroad(int direction) {
         Random random = new Random();
         int num;
         switch (direction) {
@@ -153,7 +124,7 @@ public class Car extends Thread {
                 this.amountOfChoices++;
                 break;
             case 9:
-                if (amountOfChoices == 2) {
+                if (amountOfChoices == 3) {
                     this.currentY++;
                     this.amountOfChoices = 0;
                 } else {
@@ -162,10 +133,12 @@ public class Car extends Thread {
                         this.currentX--;
                     else
                         this.currentY++;
+
+                    this.amountOfChoices++;
                 }
                 break;
             case 10:
-                if (amountOfChoices == 2) {
+                if (amountOfChoices == 3) {
                     this.currentX--;
                     this.amountOfChoices = 0;
                 } else {
@@ -174,11 +147,12 @@ public class Car extends Thread {
                         this.currentX--;
                     else
                         this.currentY--;
-                }
 
+                    this.amountOfChoices++;
+                }
                 break;
             case 11:
-                if (amountOfChoices == 2) {
+                if (amountOfChoices == 3) {
                     this.currentX++;
                     this.amountOfChoices = 0;
                 } else {
@@ -187,10 +161,12 @@ public class Car extends Thread {
                         this.currentY++;
                     else
                         this.currentX++;
+
+                    this.amountOfChoices++;
                 }
                 break;
             case 12:
-                if (amountOfChoices == 2) {
+                if (amountOfChoices == 3) {
                     this.currentY--;
                     this.amountOfChoices = 0;
                 } else {
@@ -199,6 +175,8 @@ public class Car extends Thread {
                         this.currentX++;
                     else
                         this.currentY--;
+
+                    this.amountOfChoices++;
                 }
                 break;
         }
@@ -219,4 +197,3 @@ public class Car extends Thread {
 
 
 }
-

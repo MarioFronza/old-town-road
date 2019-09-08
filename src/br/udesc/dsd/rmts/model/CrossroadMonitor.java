@@ -1,8 +1,8 @@
 package br.udesc.dsd.rmts.model;
 
-public class CrossRoadMonitor extends RoadItem {
+public class CrossroadMonitor extends RoadItem {
 
-    public CrossRoadMonitor(int x, int y) {
+    public CrossroadMonitor(int x, int y) {
         super(x, y);
     }
 

@@ -53,7 +53,7 @@ public class MainFrame extends JFrame implements Observer {
 
         this.main = new JPanel();
         this.main.setLayout(new GridBagLayout());
-        
+
         this.info = new JPanel();
         this.info.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.info.setLayout(new GridBagLayout());
@@ -69,31 +69,45 @@ public class MainFrame extends JFrame implements Observer {
 
         this.buttonStartSimulation = new JButton();
         this.buttonStartSimulation.setText("Start simulation");
-        this.buttonStartSimulation.setForeground(new Color(0, 184, 148));
-		this.buttonStartSimulation.addActionListener((ActionEvent e) -> {
-			this.meshController.runSimulation();
-		});
-		
-		this.buttonOtherSimulation = new JButton();
+        this.buttonStartSimulation.setForeground(new Color(85, 239, 196));
+        this.buttonStartSimulation.addActionListener((ActionEvent e) -> {
+            this.meshController.runSimulation();
+            this.buttonStartSimulation.setEnabled(false);
+            this.buttonStopSimulation.setEnabled(true);
+        });
+
+        this.buttonOtherSimulation = new JButton();
         this.buttonOtherSimulation.setText("Other simulation");
         this.buttonOtherSimulation.setForeground(new Color(99, 110, 114));
         this.buttonOtherSimulation.setPreferredSize(sizeButton);
-		this.buttonOtherSimulation.addActionListener((ActionEvent e) -> {
-			ChoiceFrame choice = new ChoiceFrame();
-			choice.setVisible(true);
-			super.setVisible(false);
-		});
+        this.buttonOtherSimulation.addActionListener((ActionEvent e) -> {
+            if (!this.meshController.isTerminate()) {
+                JOptionPane.showMessageDialog(this, "Aguarde o fim da simulação!");
+            } else {
+                super.dispose();
+                ChoiceFrame choice = new ChoiceFrame();
+                choice.setVisible(true);
+            }
+        });
 
         this.buttonStopSimulation = new JButton();
         this.buttonStopSimulation.setText("Stop simulation");
         this.buttonStopSimulation.setForeground(new Color(250, 177, 160));
         this.buttonStopSimulation.setPreferredSize(sizeButton);
+        this.buttonStopSimulation.setEnabled(false);
+        this.buttonStopSimulation.addActionListener((ActionEvent e) -> {
+            this.meshController.stopSimulation();
+            this.buttonStopSimulation.setEnabled(false);
+            this.buttonStartSimulation.setEnabled(false);
+        });
+
     }
 
     private void addComponents() {
         GridBagConstraints cons;
-        
+
         cons = new GridBagConstraints();
+<<<<<<< HEAD
     	cons.gridy = 0;
     	cons.gridx = 0;
     	cons.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -129,12 +143,43 @@ public class MainFrame extends JFrame implements Observer {
         this.main.add(this.roadMeshPanel, cons);
     	
         this.buttons.setBackground(Color.WHITE);
+=======
+        cons.gridy = 0;
+        cons.gridx = 0;
+        cons.anchor = GridBagConstraints.FIRST_LINE_START;
+        this.info.add(this.buttonStartSimulation, cons);
+
+        cons = new GridBagConstraints();
+        cons.gridy = 1;
+        cons.gridx = 0;
+        cons.anchor = GridBagConstraints.FIRST_LINE_START;
+        this.info.add(this.buttonStopSimulation, cons);
+
+        cons = new GridBagConstraints();
+        cons.gridy = 2;
+        cons.gridx = 0;
+        cons.anchor = GridBagConstraints.FIRST_LINE_START;
+        this.info.add(this.buttonOtherSimulation, cons);
+
+        cons = new GridBagConstraints();
+        cons.gridy = 0;
+        cons.gridx = 0;
+        cons.anchor = GridBagConstraints.NORTH;
+        this.main.add(this.info, cons);
+
+        cons = new GridBagConstraints();
+        cons.gridy = 0;
+        cons.gridx = 1;
+
+        this.main.add(this.roadMeshPanel, cons);
+
+>>>>>>> b9f302084f6db9cf7e4f409ab0ddfb512146d69e
         this.info.setBackground(Color.WHITE);
         this.main.setBackground(Color.WHITE);
         super.add(this.main);
     }
 
-	private void start() {
+    private void start() {
         super.pack();
         super.setLocationRelativeTo(null);
     }
@@ -142,11 +187,12 @@ public class MainFrame extends JFrame implements Observer {
     @Override
     public void message(String message) {
         JOptionPane.showMessageDialog(this, message);
+        this.buttonStartSimulation.setEnabled(true);
     }
 
     @Override
     public synchronized void roadMeshUpdate() {
-    	this.roadMeshPanel.updateUI();
+        this.roadMeshPanel.updateUI();
     }
 
 }
