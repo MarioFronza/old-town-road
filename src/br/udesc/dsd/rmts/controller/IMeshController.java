@@ -62,11 +62,11 @@ public interface IMeshController extends Observed {
     void setFactory(AbstractRoadItemFactory factory);
 
     int getTimeInterval();
-    
+
     String getGeneralInformation();
-    
+
     int getNumberOfCars();
-    
+
     void setPositions(int x, int y, List<RoadItem> positions);
 
     void setNumberOfCars(int numberOfCars);

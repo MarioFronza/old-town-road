@@ -44,8 +44,6 @@ public class RoadMonitor extends RoadItem {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
     }
 
 }

@@ -75,7 +75,7 @@ public class Simulation extends Thread {
             try {
                 finished = this.meshController.getExecutorService().awaitTermination(10, TimeUnit.SECONDS);
                 if (finished) {
-                    this.meshController.notifyMessage("Simulação finalizada!");
+                    this.meshController.notifyMessage("Simulation finished!");
                     this.meshController.setTerminate();
                 }
             } catch (InterruptedException e) {

@@ -21,12 +21,6 @@ public class CrossroadSemaphore extends RoadItem {
         free = new Semaphore(1);
         mutex = new Semaphore(1);
     }
-    
-    public void tryToEnterCrossRoad(ArrayList<RoadItem> positions) {
-    	for (int i = 0; i < positions.size(); i++) {
-    		
-    	}
-    }
 
     public void addCar(Car car) {
         try {
@@ -59,5 +53,6 @@ public class CrossroadSemaphore extends RoadItem {
             free.release();
         }
     }
+
 
 }

@@ -90,7 +90,7 @@ public class MeshController implements IMeshController {
 
     @Override
     public void runSimulation() {
-    	this.terminate = false;
+        this.terminate = false;
         this.simulation = new Simulation(this);
         this.executorService = Executors.newCachedThreadPool();
         this.simulation.setRunning();
@@ -266,19 +266,19 @@ public class MeshController implements IMeshController {
         return this.matrix;
     }
 
-	@Override
-	public String getGeneralInformation() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("<html><body>Time interval: " + this.getTimeInterval() + "s<br />");
-		builder.append("Number of cars: " + this.getNumberOfCars() + "<br>"); 
-		builder.append("Filename: " + this.file.getName() + "<br></body></html>");
-		
-		return builder.toString();
-	}
+    @Override
+    public String getGeneralInformation() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<html><body>Time interval: " + this.getTimeInterval() + "s<br />");
+        builder.append("Number of cars: " + this.getNumberOfCars() + "<br>");
+        builder.append("Filename: " + this.file.getName() + "<br></body></html>");
 
-	@Override
-	public void setPositions(int x, int y, List<RoadItem> positions) {
-		// TODO Auto-generated method stub
-		
-	}
+        return builder.toString();
+    }
+
+    @Override
+    public void setPositions(int x, int y, List<RoadItem> positions) {
+        // TODO Auto-generated method stub
+
+    }
 }
