@@ -19,6 +19,8 @@ public class Car implements Runnable {
     private RoadItem matrix[][];
     private int currentX;
     private int currentY;
+    private Queue<RoadItem> positions;
+    private List<Semaphore> semaphores;
     private Random random;
     private RoadItem currentRoad;
     private IMeshController meshController;
@@ -30,10 +32,16 @@ public class Car implements Runnable {
         this.route = new LinkedList<>();
         this.meshController = MeshController.getInstance();
         this.matrix = meshController.getMatrix();
+        this.positions = new LinkedList<>();
+        this.semaphores = new ArrayList<>();
         this.currentRoad = null;
         this.amountOfChoices = 0;
         this.random = new Random();
         this.velocity = random.nextInt(100) + 200;
+        for (int i = 0; i < 4; i++) {
+            semaphores.add(new Semaphore(1));
+            semaphores.get(i).tryAcquire();
+        }
         switch (type) {
             case 0:
                 this.color = "red";
@@ -50,13 +58,6 @@ public class Car implements Runnable {
     @Override
     public void run() {
         boolean free = false;
-        Queue<RoadItem> positions = new LinkedList<>();
-        List<Semaphore> semaphores = new ArrayList<>();
-
-        for (int i = 0; i < 4; i++) {
-            semaphores.add(new Semaphore(1));
-            semaphores.get(i).tryAcquire();
-        }
 
         while (!route.isEmpty()) {
             boolean moved = false;
@@ -72,7 +73,7 @@ public class Car implements Runnable {
             do {
                 Random rand = new Random();
                 try {
-
+                    positions.clear();
                     if (item.direction > 4 && !free) {
                         positions.add(item);
                         for (RoadItem roadItem : route) {
@@ -84,21 +85,20 @@ public class Car implements Runnable {
                             }
                         }
                         int amountAcquired = 0;
-                        int sz = positions.size();
                         for (int i = 0; i < positions.size(); i++) {
                             boolean acquired = semaphores.get(i).tryAcquire(500, TimeUnit.MILLISECONDS);
                             if (acquired) {
                                 amountAcquired++;
                             }
                         }
-                        if (amountAcquired == sz) {
+                        if (amountAcquired == positions.size()) {
                             free = true;
                         } else {
                             free = false;
                             for (int i = 0; i < positions.size(); i++) {
                                 semaphores.get(i).release();
                             }
-                            positions.clear();
+
                             Thread.sleep(200 + rand.nextInt(400));
                         }
                         moved = false;
@@ -109,7 +109,7 @@ public class Car implements Runnable {
                         for (int i = 0; i < positions.size(); i++) {
                             semaphores.get(i).release();
                         }
-                        positions.clear();
+
                         moved = true;
                     }
                 } catch (Exception e) {
