@@ -117,7 +117,6 @@ public class MeshController implements IMeshController {
 
     @Override
     public void checkCrossPont(int x, int y, int direction) {
-        this.matrix[x][y] = factory.createCrossRoad(x, y);
         this.matrix[x][y].setImagePath("assets/stone.png");
         this.matrix[x][y].setDirection(direction);
     }
