@@ -4,6 +4,8 @@ import br.udesc.dsd.rmts.controller.IMeshController;
 import br.udesc.dsd.rmts.controller.MeshController;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Car thread class
@@ -31,7 +33,7 @@ public class Car implements Runnable {
         this.currentRoad = null;
         this.amountOfChoices = 0;
         this.random = new Random();
-        this.velocity = random.nextInt(300) + 100;
+        this.velocity = random.nextInt(100) + 200;
         switch (type) {
             case 0:
                 this.color = "red";
@@ -47,22 +49,68 @@ public class Car implements Runnable {
 
     @Override
     public void run() {
+        boolean free = false;
+        Queue<RoadItem> positions = new LinkedList<>();
+        List<Semaphore> semaphores = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            semaphores.add(new Semaphore(1));
+            semaphores.get(i).tryAcquire();
+        }
 
         while (!route.isEmpty()) {
-            boolean andou = false;
+            boolean moved = false;
+            RoadItem item = route.remove();
+            if (item.direction <= 4) {
+                free = false;
+            }
+            try {
+                Thread.sleep(velocity);
+            } catch (Exception ie) {
+                ie.printStackTrace();
+            }
             do {
+                Random rand = new Random();
                 try {
-                    RoadItem item = route.remove();
 
-                    this.meshController.addCar(this, item.getX(), item.getY());
-                    this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
-                    this.currentRoad = item;
-                    andou = true;
-
-                    try {
-                        Thread.sleep(velocity);
-                    } catch (Exception ie) {
-                        ie.printStackTrace();
+                    if (item.direction > 4 && !free) {
+                        positions.add(item);
+                        for (RoadItem roadItem : route) {
+                            if (roadItem.direction > 4) {
+                                if (!positions.contains(roadItem))
+                                    positions.add(roadItem);
+                            } else {
+                                break;
+                            }
+                        }
+                        int amountAcquired = 0;
+                        int sz = positions.size();
+                        for (int i = 0; i < positions.size(); i++) {
+                            boolean acquired = semaphores.get(i).tryAcquire(500, TimeUnit.MILLISECONDS);
+                            if (acquired) {
+                                amountAcquired++;
+                            }
+                        }
+                        if (amountAcquired == sz) {
+                            free = true;
+                        } else {
+                            free = false;
+                            for (int i = 0; i < positions.size(); i++) {
+                                semaphores.get(i).release();
+                            }
+                            positions.clear();
+                            Thread.sleep(200 + rand.nextInt(400));
+                        }
+                        moved = false;
+                    } else {
+                        this.meshController.addCar(this, item.getX(), item.getY());
+                        this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
+                        this.currentRoad = item;
+                        for (int i = 0; i < positions.size(); i++) {
+                            semaphores.get(i).release();
+                        }
+                        positions.clear();
+                        moved = true;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -72,8 +120,7 @@ public class Car implements Runnable {
                         ie.printStackTrace();
                     }
                 }
-
-            } while (!andou);
+            } while (!moved);
         }
         this.meshController.removeThread(currentRoad.getCar());
         this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());

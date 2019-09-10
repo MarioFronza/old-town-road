@@ -1,7 +1,5 @@
 package br.udesc.dsd.rmts.model;
 
-import java.util.List;
-
 /**
  * Road item abstract class
  *
@@ -10,7 +8,6 @@ import java.util.List;
  */
 public abstract class RoadItem {
 
-    private List<RoadItem> positions;
     protected String imagePath;
     protected boolean isEntryPoint;
     protected boolean isExitPoint;
@@ -79,10 +76,6 @@ public abstract class RoadItem {
         } else {
             setImagePath("assets/" + car.getColor() + "car" + this.direction + ".png");
         }
-    }
-
-    public void setPositions(List<RoadItem> positions) {
-        this.positions = positions;
     }
 
     public int getX() {
