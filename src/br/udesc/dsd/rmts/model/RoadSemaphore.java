@@ -38,7 +38,6 @@ public class RoadSemaphore extends RoadItem {
         this.semaphore.release();
     }
 
-
     public void addCar(Car car) {
         try {
             free.acquire();

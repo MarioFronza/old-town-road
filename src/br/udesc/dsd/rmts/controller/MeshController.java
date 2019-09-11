@@ -226,11 +226,9 @@ public class MeshController implements IMeshController {
         this.timeInterval = timeInterval;
     }
 
-    private Queue<RoadItem> auxPosition;
 
     @Override
     public boolean tryAcquire(Queue<RoadItem> positions) {
-        auxPosition = positions;
         int count = 0;
         int size = positions.size();
         for (int j = 0; j < size; j++) {
@@ -245,13 +243,12 @@ public class MeshController implements IMeshController {
     }
 
     @Override
-    public void release() {
-        int size = auxPosition.size();
+    public void release(Queue<RoadItem> positions) {
+        int size = positions.size();
         for (int j = 0; j < size; j++) {
-            RoadItem roadItem = auxPosition.remove();
+            RoadItem roadItem = positions.remove();
             this.matrix[roadItem.getX()][roadItem.getY()].release();
         }
-        auxPosition.clear();
     }
 
     @Override

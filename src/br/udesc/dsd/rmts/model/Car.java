@@ -82,14 +82,16 @@ public class Car implements Runnable {
                                 break;
                             }
                         }
-                        boolean acquiredCount = this.meshController.tryAcquire(positions);
-                        if (acquiredCount) {
+                        Queue<RoadItem> auxPositions = positions;
+                        if (this.meshController.tryAcquire(positions)) {
                             free = true;
+                            System.out.println("vai");
                         } else {
+                            System.out.println("nao vai ");
                             free = false;
                             Thread.sleep(200 + rand.nextInt(400));
                         }
-                        this.meshController.release();
+                        this.meshController.release(auxPositions);
                         moved = false;
                     } else {
                         this.meshController.addCar(this, item.getX(), item.getY());

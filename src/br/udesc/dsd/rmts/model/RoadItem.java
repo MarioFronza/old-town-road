@@ -12,7 +12,6 @@ import java.util.concurrent.Semaphore;
  */
 public abstract class RoadItem {
 
-    protected List<Semaphore> semaphores;
     protected Semaphore semaphore;
     protected String imagePath;
     protected boolean isEntryPoint;
@@ -27,12 +26,7 @@ public abstract class RoadItem {
         this.direction = 0;
         this.x = x;
         this.y = y;
-        this.semaphores = new ArrayList<>();
         this.semaphore = new Semaphore(1);
-        for (int i = 0; i < 4; i++) {
-            semaphores.add(new Semaphore(1));
-            semaphores.get(i).tryAcquire();
-        }
     }
 
     public abstract boolean tryAcquire();

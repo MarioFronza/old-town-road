@@ -76,5 +76,5 @@ public interface IMeshController extends Observed {
 
     boolean tryAcquire(Queue<RoadItem> size);
 
-    void release();
+    void release(Queue<RoadItem> positions);
 }
