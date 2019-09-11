@@ -42,7 +42,7 @@ public class ChoiceFrame extends JFrame {
     private IMeshController meshController;
 
     public ChoiceFrame() {
-        super.setTitle("🐎 Old town road - New RoadItemMonitorFactory");
+        super.setTitle("🐎 Old town road");
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
         super.setResizable(false);
         super.setFocusable(true);
