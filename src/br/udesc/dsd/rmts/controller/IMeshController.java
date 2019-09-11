@@ -7,6 +7,7 @@ import br.udesc.dsd.rmts.model.abstractfactory.AbstractRoadItemFactory;
 
 import java.io.File;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -73,5 +74,7 @@ public interface IMeshController extends Observed {
 
     void setTimeInterval(int timeInterval);
 
+    boolean tryAcquire(Queue<RoadItem> size);
 
+    void release();
 }

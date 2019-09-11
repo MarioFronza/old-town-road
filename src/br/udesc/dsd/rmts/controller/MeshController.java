@@ -226,6 +226,34 @@ public class MeshController implements IMeshController {
         this.timeInterval = timeInterval;
     }
 
+    private Queue<RoadItem> auxPosition;
+
+    @Override
+    public boolean tryAcquire(Queue<RoadItem> positions) {
+        auxPosition = positions;
+        int count = 0;
+        int size = positions.size();
+        for (int j = 0; j < size; j++) {
+            if(!positions.isEmpty()){
+                RoadItem roadItem = positions.remove();
+                if (this.matrix[roadItem.getX()][roadItem.getY()].tryAcquire()) {
+                    count++;
+                }
+            }
+        }
+        return count == positions.size();
+    }
+
+    @Override
+    public void release() {
+        int size = auxPosition.size();
+        for (int j = 0; j < size; j++) {
+            RoadItem roadItem = auxPosition.remove();
+            this.matrix[roadItem.getX()][roadItem.getY()].release();
+        }
+        auxPosition.clear();
+    }
+
     @Override
     public void setNumberOfCars(int numberOfCars) {
         this.numberOfCars = numberOfCars;

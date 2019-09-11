@@ -20,7 +20,7 @@ public class Car implements Runnable {
     private int currentX;
     private int currentY;
     private Queue<RoadItem> positions;
-    private List<Semaphore> semaphores;
+
     private Random random;
     private RoadItem currentRoad;
     private IMeshController meshController;
@@ -33,15 +33,12 @@ public class Car implements Runnable {
         this.meshController = MeshController.getInstance();
         this.matrix = meshController.getMatrix();
         this.positions = new LinkedList<>();
-        this.semaphores = new ArrayList<>();
+
         this.currentRoad = null;
         this.amountOfChoices = 0;
         this.random = new Random();
         this.velocity = random.nextInt(100) + 200;
-        for (int i = 0; i < 4; i++) {
-            semaphores.add(new Semaphore(1));
-            semaphores.get(i).tryAcquire();
-        }
+
         switch (type) {
             case 0:
                 this.color = "red";
@@ -73,8 +70,9 @@ public class Car implements Runnable {
             do {
                 Random rand = new Random();
                 try {
-                    positions.clear();
+
                     if (item.direction > 4 && !free) {
+                        positions.clear();
                         positions.add(item);
                         for (RoadItem roadItem : route) {
                             if (roadItem.direction > 4) {
@@ -84,32 +82,19 @@ public class Car implements Runnable {
                                 break;
                             }
                         }
-                        int amountAcquired = 0;
-                        for (int i = 0; i < positions.size(); i++) {
-                            boolean acquired = semaphores.get(i).tryAcquire(500, TimeUnit.MILLISECONDS);
-                            if (acquired) {
-                                amountAcquired++;
-                            }
-                        }
-                        if (amountAcquired == positions.size()) {
+                        boolean acquiredCount = this.meshController.tryAcquire(positions);
+                        if (acquiredCount) {
                             free = true;
                         } else {
                             free = false;
-                            for (int i = 0; i < positions.size(); i++) {
-                                semaphores.get(i).release();
-                            }
-
                             Thread.sleep(200 + rand.nextInt(400));
                         }
+                        this.meshController.release();
                         moved = false;
                     } else {
                         this.meshController.addCar(this, item.getX(), item.getY());
                         this.meshController.removeCar(currentRoad.getX(), currentRoad.getY());
                         this.currentRoad = item;
-                        for (int i = 0; i < positions.size(); i++) {
-                            semaphores.get(i).release();
-                        }
-
                         moved = true;
                     }
                 } catch (Exception e) {

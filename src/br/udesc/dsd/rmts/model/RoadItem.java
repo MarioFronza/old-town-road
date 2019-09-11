@@ -1,5 +1,9 @@
 package br.udesc.dsd.rmts.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
 /**
  * Road item abstract class
  *
@@ -8,6 +12,8 @@ package br.udesc.dsd.rmts.model;
  */
 public abstract class RoadItem {
 
+    protected List<Semaphore> semaphores;
+    protected Semaphore semaphore;
     protected String imagePath;
     protected boolean isEntryPoint;
     protected boolean isExitPoint;
@@ -21,7 +27,17 @@ public abstract class RoadItem {
         this.direction = 0;
         this.x = x;
         this.y = y;
+        this.semaphores = new ArrayList<>();
+        this.semaphore = new Semaphore(1);
+        for (int i = 0; i < 4; i++) {
+            semaphores.add(new Semaphore(1));
+            semaphores.get(i).tryAcquire();
+        }
     }
+
+    public abstract boolean tryAcquire();
+
+    public abstract void release();
 
     public abstract void addCar(Car car);
 

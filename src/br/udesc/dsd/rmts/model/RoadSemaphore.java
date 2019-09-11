@@ -1,6 +1,7 @@
 package br.udesc.dsd.rmts.model;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Road implementation with semaphore
@@ -20,6 +21,23 @@ public class RoadSemaphore extends RoadItem {
         free = new Semaphore(1);
         mutex = new Semaphore(1);
     }
+
+    @Override
+    public boolean tryAcquire() {
+        boolean acquired = false;
+        try {
+            acquired = this.semaphore.tryAcquire(500, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return acquired;
+    }
+
+    @Override
+    public void release() {
+        this.semaphore.release();
+    }
+
 
     public void addCar(Car car) {
         try {
